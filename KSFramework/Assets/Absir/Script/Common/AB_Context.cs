@@ -53,15 +53,22 @@ namespace Absir
 
 		}
 
-		public void AddDelayAction (Action action, long time, bool schedule = false, bool backgroud = false)
+		public void AddDelayAction (Action action, long delay, bool schedule = false, bool backgroud = false)
 		{
 			if (action == null) {
 				return;
 			}
 			
-			ActionObj<long, Action, bool> actionObj = ActionObj<long, Action, bool>.newObj (schedule ? time : (contextTime + time), action, backgroud);
-			lock (addDelayActions) {
-				addDelayActions.Add (actionObj);
+			ActionObj<long, Action, bool> actionObj = ActionObj<long, Action, bool>.newObj (contextTime + delay, action, backgroud);
+			if (schedule) {
+				lock (addScheduleActions) {
+					addScheduleActions.Add (actionObj);
+				}
+
+			} else {
+				lock (addDelayActions) {
+					addDelayActions.Add (actionObj);
+				}
 			}
 		}
 
@@ -154,6 +161,19 @@ namespace Absir
 
 		private bool inited;
 
+		private System.Threading.Thread _currentThread;
+
+		public System.Threading.Thread CurrentThread {
+			get {
+				return _currentThread;
+			}
+		}
+
+		public bool isMainThread ()
+		{
+			return System.Threading.Thread.CurrentThread == _currentThread;
+		}
+
 		private void initContext ()
 		{
 			if (inited) {
@@ -161,6 +181,7 @@ namespace Absir
 			}
 
 			inited = true;
+			_currentThread = System.Threading.Thread.CurrentThread;
 			DontDestroyOnLoad (gameObject);
 			gameObject.name = "_AB_Context";
 			CalTime ();
@@ -249,12 +270,21 @@ namespace Absir
 					action ();
 
 				} catch (System.Exception e) {
-					KEngine.Log.Error ("InvokeAction action error", action);
+					KEngine.Log.Error ("AB_Context InvokeAction action error", action);
 				}
 			
 			} else {
 				AddAction (action);
 			}
+		}
+
+		public static void EditorMainThread ()
+		{
+			#if UNITY_EDITOR
+			if (!ME.isMainThread ()) {
+				throw new UnityException ("editor is not main thread");
+			}
+			#endif
 		}
 	}
 }
