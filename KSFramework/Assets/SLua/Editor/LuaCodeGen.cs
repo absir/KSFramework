@@ -35,6 +35,20 @@ namespace SLua
 
 	public interface ICustomExportPost { }
 
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
+	public class GenLuaNameAttribute : System.Attribute
+	{
+		private string name;
+
+		public GenLuaNameAttribute(string name)
+		{
+			this.name = name;
+		}
+
+		public string getName() {
+			return name;
+		}
+	}
 
     public class LuaCodeGen : MonoBehaviour
 	{
@@ -270,6 +284,25 @@ namespace SLua
 			clear(new string[] { GenPath+"Unity" });
 			Debug.Log("Clear Unity & UI complete.");
 		}
+
+		static public string GetLuaClassAttributeName(Type t)
+		{
+			object[] attrs = t.GetCustomAttributes (typeof(GenLuaNameAttribute), false);
+			if (attrs != null && attrs.Length > 0) {
+				GenLuaNameAttribute attr = attrs [0] as GenLuaNameAttribute;
+				string name = attr.getName ();
+				if (name != null) {
+					if (name.Length == 0) {
+						return t.Name;
+
+					} else {
+						return name;
+					}
+				}
+			}
+
+			return null;
+		}
 		
 		[MenuItem("SLua/Custom/Make")]
 		static public void Custom()
@@ -288,6 +321,10 @@ namespace SLua
 			
 			ExportGenericDelegate fun = (Type t, string ns) =>
 			{
+				if(ns == null) {
+					ns = GetLuaClassAttributeName(t);
+				}
+				
 				if (Generate(t, ns, path))
 					exports.Add(t);
 			};
