@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Absir
 {
+	[SLua.CustomLuaClassAttribute]
 	public class AB_Context : MonoBehaviour
 	{
 		public static System.DateTime ZERO_DATE = new System.DateTime (1970, 1, 1);
@@ -88,7 +89,7 @@ namespace Absir
 		void Awake ()
 		{
 			initContext ();
-			if (_ME != null) {
+			if (_ME != null && _ME != this) {
 				throw new UnityException ("AB_Context has setted");
 			}
 
@@ -270,7 +271,7 @@ namespace Absir
 					action ();
 
 				} catch (System.Exception e) {
-					KEngine.Log.Error ("AB_Context InvokeAction action error", action);
+					Brige.ME.LogError ("AB_Context InvokeAction action error =>" + action + " : " + e);
 				}
 			
 			} else {
