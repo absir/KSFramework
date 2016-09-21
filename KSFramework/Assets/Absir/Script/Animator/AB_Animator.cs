@@ -4,6 +4,7 @@ using System.Collections;
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_Animator : MonoBehaviour
 	{
 		public int index;

@@ -3,12 +3,12 @@ CRC: 0
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 62e89bec44c255707c292541d809f415
+    Hash: 73bc9c839a5f1e212c511e0d9e9245d5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
 HashAppended: 0
 ClassTypes: []
 Assets:
-- Assets/BundleResources/Scene/TestScene/TestScene.unity
+- Assets/BundleResources/Scene/TestScene/TestScene2.unity
 Dependencies: []

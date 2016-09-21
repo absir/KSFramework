@@ -8,6 +8,7 @@ TestLuaBehaivour = {}
 function TestLuaBehaivour:Awake()
     Log.Info("Test Lua Behaivour Awake!")
 end
+
 function TestLuaBehaivour:Update()
     if Time.frameCount % 100 == 0 then
         Log.Info("Test Lua Behaivour Update!")
