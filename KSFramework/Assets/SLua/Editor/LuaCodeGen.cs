@@ -35,21 +35,6 @@ namespace SLua
 
 	public interface ICustomExportPost { }
 
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
-	public class GenLuaNameAttribute : System.Attribute
-	{
-		private string name;
-
-		public GenLuaNameAttribute(string name)
-		{
-			this.name = name;
-		}
-
-		public string getName() {
-			return name;
-		}
-	}
-
     public class LuaCodeGen : MonoBehaviour
 	{
 		static public string GenPath = SLuaSetting.Instance.UnityEngineGeneratePath;
