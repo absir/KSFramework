@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_UI
 	{
 		public const float BEHIND_STEP = 0.000001f;
@@ -150,12 +151,16 @@ namespace Absir
 
 		public void openDialog (GameObject gameObject)
 		{
-			openDialogName (gameObject, "_dialogBackGround");
+			openDialogName (gameObject, null);
 		}
 
 		public void openDialogName (GameObject gameObject, string name)
 		{
-			openDialogWithBackGround (gameObject, _dialogObjectStack.Count == 0 ? getRetain (name) : null);
+			if (name == null) {
+				name = "_dialogBackGround";
+			}
+			
+			openDialogWithBackGround (gameObject, _dialogObjectStack.Count == 0 && name.Length != 0 ? getRetain (name) : null);
 		}
 
 		public void openDialogWithBackGround (GameObject gameObject, GameObject dialogBackGround)

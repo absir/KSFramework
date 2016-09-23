@@ -9,6 +9,8 @@ namespace Absir
 	{
 		protected int activeComponentIndex;
 
+		public Action<int> componentIndexAction;
+
 		public int getActiveComponentIndex ()
 		{
 			return activeComponentIndex;
@@ -26,6 +28,10 @@ namespace Absir
 		{
 			if (base.setActiveComponentIndex (componentIndex)) {
 				activeComponentIndex = componentIndex;
+				if (componentIndexAction != null) {
+					componentIndexAction (componentIndex);
+				}
+
 				return true;
 			}
 		

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class VieworUtils
 	{
 		public static AB_Viewor getViewor (GameObject gameObject)
