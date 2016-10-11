@@ -55,7 +55,7 @@ namespace Absir
 			viewor.parent = this;
 
 			Transform container = gameObject.transform.parent;
-			GameObjectUtils.getGameObjectComponent<AB_Retain> (gameObject).retain ();
+			GameObjectUtils.getOrAddComponent<AB_Retain> (gameObject).retain ();
 
 			doDisappearTransform ();
 			viewor.doAppearTransform (container);
@@ -63,7 +63,7 @@ namespace Absir
 
 		public void presentGameObject (GameObject go)
 		{
-			presentViewor (GameObjectUtils.getGameObjectComponent<AB_Viewor> (go));
+			presentViewor (GameObjectUtils.getOrAddComponent<AB_Viewor> (go));
 		}
 
 		public AB_Viewor dismissViewor ()
@@ -72,7 +72,7 @@ namespace Absir
 				Transform container = gameObject.transform.parent;
 				doDisappearTransform ();
 
-				GameObjectUtils.getGameObjectComponent<AB_Retain> (parent.gameObject).release ();
+				GameObjectUtils.getOrAddComponent<AB_Retain> (parent.gameObject).release ();
 
 				AB_Viewor viewor = parent;
 				parent.child = null;
@@ -99,7 +99,7 @@ namespace Absir
 
 		public static void doAppearGameObject (GameObject gameObject, Transform containerTrans)
 		{
-			GameObjectUtils.getGameObjectComponent<AB_Viewor> (gameObject).doAppearTransform (containerTrans);
+			GameObjectUtils.getOrAddComponent<AB_Viewor> (gameObject).doAppearTransform (containerTrans);
 		}
 	}
 }

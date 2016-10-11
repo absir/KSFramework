@@ -172,6 +172,10 @@ return $UI_NAME
                     Log.LogWarning("Reload Lua - {0}", kv.Key);
                 }
             }
+
+			if (Absir.Editor_Brige.ME != null) {
+				Absir.Editor_Brige.ME.ReloadLua ();
+			}
         }
 
         [MenuItem("KSFramework/UI/Reload Lua + Reload UI AssetBundle")]
@@ -182,6 +186,11 @@ return $UI_NAME
                 Log.LogError("Reload UI only when your editor is playing!");
                 return;
             }
+
+			if (Absir.Editor_Brige.ME != null) {
+				Absir.Editor_Brige.ME.BeforeReloadUI ();
+			}
+
             foreach (var kv in UIModule.Instance.UIWindows)
             {
                 var luaController = kv.Value.UIWindow as LuaUIController;
@@ -203,6 +212,9 @@ return $UI_NAME
                 }
             }
             
+			if (Absir.Editor_Brige.ME != null) {
+				Absir.Editor_Brige.ME.AfterReloadUI ();
+			}
         }
         /// <summary>
         /// 找到所有的LuaUIController被进行Reload
@@ -216,6 +228,11 @@ return $UI_NAME
                 Log.LogError("Reload UI only when your editor is playing!");
                 return;
             }
+
+			if (Absir.Editor_Brige.ME != null) {
+				Absir.Editor_Brige.ME.BeforeReloadUILua ();
+			}
+
             foreach (var kv in UIModule.Instance.UIWindows)
             {
                 var luaController = kv.Value.UIWindow as LuaUIController;
@@ -232,6 +249,10 @@ return $UI_NAME
                         UIModule.Instance.OpenWindow(kv.Key, luaController.LastOnOpenArgs);
                 }
             }
+
+			if (Absir.Editor_Brige.ME != null) {
+				Absir.Editor_Brige.ME.AfterReloadUILua ();
+			}
         }
     }
 }

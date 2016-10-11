@@ -18,3 +18,8 @@ I18N = en_US
 [KSFramework.Lua]
 ; a path relative to product path
 LuaPath = Lua
+
+[AB_Config]
+;width = 400
+;height = 800
+;style = 1

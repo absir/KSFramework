@@ -36,21 +36,6 @@ namespace Absir
 			CallAddWindow (parent, true, instanceName);
 		}
 
-		public static void OpenDialogWindow (string uiTemplateName, string name, params object[] args)
-		{
-			OpenDialogNameWindow (uiTemplateName, null, name, args);
-		}
-
-		public static void OpenDialogNameWindow (string uiTemplateName, string instanceName, string name, params object[] args)
-		{
-			if (string.IsNullOrEmpty (instanceName)) {
-				instanceName = uiTemplateName;
-			}
-				
-			KEngine.UI.UIModule.Instance.OpenDynamicWindow (uiTemplateName, instanceName, args);
-			CallDialogWindow (instanceName, name);
-		}
-
 		public static void CallAddWindow (Transform parent, bool dynamicUI, string uiName)
 		{
 			if (parent != null) {
@@ -65,6 +50,21 @@ namespace Absir
 					KEngine.UI.UIModule.Instance.CallUI (uiName, action);
 				}
 			}
+		}
+
+		public static void OpenDialogWindow (string uiTemplateName, string name, params object[] args)
+		{
+			OpenDialogNameWindow (uiTemplateName, null, name, args);
+		}
+
+		public static void OpenDialogNameWindow (string uiTemplateName, string instanceName, string name, params object[] args)
+		{
+			if (string.IsNullOrEmpty (instanceName)) {
+				instanceName = uiTemplateName;
+			}
+				
+			KEngine.UI.UIModule.Instance.OpenDynamicWindow (uiTemplateName, instanceName, args);
+			CallDialogWindow (instanceName, name);
 		}
 
 		public static void CallDialogWindow (string uiName)

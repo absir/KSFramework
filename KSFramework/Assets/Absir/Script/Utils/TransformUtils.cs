@@ -5,6 +5,11 @@ namespace Absir
 {
 	public class TransformUtils : MonoBehaviour
 	{
+		public static string getVector2String (Vector2 vector)
+		{
+			return "{" + vector.x + "," + vector.y + "}";
+		}
+
 		public static string getVector3String (Vector3 vector)
 		{
 			return "{" + vector.x + "," + vector.y + "," + vector.z + "}";

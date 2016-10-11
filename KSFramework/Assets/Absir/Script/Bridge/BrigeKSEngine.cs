@@ -22,8 +22,9 @@ namespace Absir
 			Log.Error (message);
 		}
 
-		public void SetScreenScale (AB_Screen screen, Camera uiCamera, Vector2 scale)
+		public string GetConfig (string section, string name)
 		{
+			return AppEngine.GetConfig (section, name, false);
 		}
 	}
 }

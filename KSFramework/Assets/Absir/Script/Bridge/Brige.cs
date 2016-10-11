@@ -23,7 +23,7 @@ namespace Absir
 
 		void LogError (string message);
 
-		void SetScreenScale (AB_Screen screen, Camera uiCamera, Vector2 scale);
+		string GetConfig (string section, string name);
 	}
 }
 

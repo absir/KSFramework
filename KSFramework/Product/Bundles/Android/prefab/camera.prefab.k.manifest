@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 178371426
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 898a440dda444e0c958718e93568187d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c0e3de9f99838bc5170df08ced98ec66
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+Assets:
+- Assets/BundleResources/Prefab/Camera.prefab
+Dependencies: []

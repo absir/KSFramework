@@ -37,6 +37,7 @@ namespace Absir
 				_unactiveGameObject = new GameObject ("_UnactiveGameObject");
 			}
 
+
 			foreach (var retain in GameObject.FindObjectsOfType<AB_Retain> ()) {
 				if (retain.name.StartsWith ("_")) {
 					GameObject.DontDestroyOnLoad (retain.gameObject);
@@ -47,8 +48,10 @@ namespace Absir
 			}
 
 			_unactiveGameObject.SetActive (false);
-			_unactiveGameObject.transform.localPosition = new Vector3 (Screen.width * 128, Screen.height * 128, 0);
 			GameObject.DontDestroyOnLoad (_unactiveGameObject);
+			Transform _unactiveGameObjectTransform = _unactiveGameObject.transform;
+			_unactiveGameObjectTransform.localPosition = new Vector3 (Screen.width * 128, Screen.height * 128, 0);
+			_unactiveGameObjectTransform.localScale = AB_Screen.ME.transform.lossyScale;
 
 			_dialogObjectStack = new Stack<GameObject> ();
 		}

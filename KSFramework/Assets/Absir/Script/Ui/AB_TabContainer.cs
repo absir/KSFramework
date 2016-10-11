@@ -13,7 +13,7 @@ namespace Absir
 
 		override protected void initComponent (AB_Viewor viewor)
 		{
-			GameObjectUtils.getGameObjectComponent<AB_Retain> (viewor.gameObject).retain ();
+			GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).retain ();
 		}
 
 		override protected bool isComponentActive (AB_Viewor component)

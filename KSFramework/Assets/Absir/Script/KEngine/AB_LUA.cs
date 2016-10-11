@@ -8,7 +8,7 @@ namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
 	[SLua.GenLuaName]
-	[RequireComponent (typeof(UILuaOutlet))]
+	//[RequireComponent (typeof(UILuaOutlet))]
 	public class AB_LUA : MonoBehaviour
 	{
 		public static bool OnDestoryReload;
@@ -17,10 +17,28 @@ namespace Absir
 
 		protected LuaTable _luaTable;
 
+		private LuaFunction _luaUpdateFunction;
+
+		private LuaFunction _luaLastUpdateFunction;
+
+		public LuaTable LuaTable ()
+		{
+			return _luaTable;
+		}
+
+		public object LuaCall (string call, params object[] args)
+		{
+			return LuaTableCall (_luaTable, call, args);
+		}
+
 		public void Awake ()
 		{
 			LoadLuaBehaviour (lua, out _luaTable, true, this);
-			LuaCall ("Awake");
+			if (_luaTable != null) {
+				_luaUpdateFunction = (LuaFunction)_luaTable ["Update"];
+				_luaLastUpdateFunction = (LuaFunction)_luaTable ["LateUpdate"];
+				LuaCall ("Awake");
+			}
 		}
 
 		protected void Start ()
@@ -30,32 +48,37 @@ namespace Absir
 
 		protected void Update ()
 		{
-			LuaCall ("Update");
+			if (_luaUpdateFunction != null) {
+				_luaUpdateFunction.call ();
+			}
 		}
 
 		protected void LateUpdate ()
 		{
-			LuaCall ("LateUpdate");
+			if (_luaLastUpdateFunction != null) {
+				_luaLastUpdateFunction.call ();
+			}
 		}
 
-		public LuaTable LuaTable ()
+		public void OnEnable ()
 		{
-			return _luaTable;
+			LuaCall ("OnEnable");
 		}
 
-		public void LuaCall (string call, params object[] args)
+		public void OnDisable ()
 		{
-			LuaTableCall (_luaTable, call, args);
+			LuaCall ("OnDisable");
 		}
 
-		#if UNITY_EDITOR
 		public void OnDestory ()
 		{
+			LuaCall ("OnDestory");
+			#if UNITY_EDITOR
 			if (!string.IsNullOrEmpty (lua) && OnDestoryReload) {
 				ReloadLuaBehaviour (lua);
 			}
+			#endif
 		}
-		#endif
 
 		public static string LuaBehaviourPath (string name)
 		{
@@ -101,14 +124,29 @@ namespace Absir
 					else
 						luaTable [outletInfo.Name] = outletInfo.Object;
 				}
+
+				DestroyObject (outlet);
 			}
 
 			var luaInitObj = luaTable ["OnInit"];
-			Debuger.Assert (luaInitObj is LuaFunction, "Must have OnInit function - {0}", name);
-
-			(luaInitObj as LuaFunction).call (luaTable, component);
+			//Debuger.Assert (luaInitObj is LuaFunction, "Must have OnInit function - {0}", name);
+			if (luaInitObj != null) {
+				(luaInitObj as LuaFunction).call (luaTable, component);
+			}
 
 			return true;
+		}
+
+		public object LuaTableCall (LuaTable luaTable, string call, params object[] args)
+		{
+			if (luaTable != null) {
+				var luaCallObj = luaTable [call];
+				if (luaCallObj != null) {
+					return (luaCallObj as LuaFunction).call (args);
+				}
+			}
+
+			return null;
 		}
 
 		public static void ReloadLuaBehaviour (string name)
@@ -117,18 +155,6 @@ namespace Absir
 			var luaModule = KSFramework.KSGame.Instance.LuaModule;
 			luaModule.ClearCache (relPath);
 			Brige.ME.LogWarn ("Reload Lua: " + relPath);
-		}
-
-		public object LuaTableCall (LuaTable luaTable, string call, params object[] args)
-		{
-			if (luaTable != null) {
-				var luaCallObj = luaTable [call];
-				if (luaCallObj != null) {
-					(luaCallObj as LuaFunction).call (args);
-				}
-			}
-
-			return null;
 		}
 	}
 }

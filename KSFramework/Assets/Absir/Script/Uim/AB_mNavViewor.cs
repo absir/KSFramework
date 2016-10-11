@@ -19,7 +19,7 @@ namespace Absir
 			int count = listViewors.Count;
 			if (count > 0) {
 				foreach (AB_Viewor viewor in listViewors) {
-					GameObjectUtils.getGameObjectComponent<AB_Retain> (viewor.gameObject).retain ();
+					GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).retain ();
 					AB_UI.ME.removeView (viewor.gameObject.transform);
 				}
 			
@@ -63,7 +63,7 @@ namespace Absir
 
 		public void pushGameObject (GameObject go)
 		{
-			pushViewor (GameObjectUtils.getGameObjectComponent<AB_Viewor> (go));
+			pushViewor (GameObjectUtils.getOrAddComponent<AB_Viewor> (go));
 		}
 
 		public void popVieworRoot ()

@@ -26,19 +26,26 @@ namespace Absir
 		void Update ()
 		{
 			LinkedListNode<Action> first = null;
-			lock (actions) {
-				first = actions.First;
-				if (first != null) {
-					actions.RemoveFirst ();
-					gameObject.name = "_profileCxt_" + actions.Count;
+			long startTime = System.DateTime.Now.Ticks;
+			while (true) {
+				lock (actions) {
+					first = actions.First;
+					if (first != null) {
+						actions.RemoveFirst ();
+						gameObject.name = "_profileCxt_" + actions.Count;
+					}
 				}
-			}
 
-			if (first != null) {
-				Action action = first.Value;
-				if (action != null) {
-					//Debug.Log ("_ProfileCxt => " + action);
-					action ();	
+				if (first != null) {
+					Action action = first.Value;
+					if (action != null) {
+						//Debug.Log ("_ProfileCxt => " + action);
+						action ();	
+					}
+				}
+					
+				if (first == null || (System.DateTime.Now.Ticks - startTime) >= 60000) {
+					break;
 				}
 			}
 		}
@@ -112,10 +119,21 @@ namespace Absir
 			});
 		}
 
+		private static bool _static_soft;
+
 		[MenuItem ("AB_Edtior/Profile/Static Components")]
 		public static void StaticComponents ()
 		{
 			startProfile ("StaticComponents");
+			_static_soft = false;
+			new Thread (ThreadStaticComponents).Start ();
+		}
+
+		[MenuItem ("AB_Edtior/Profile/Static Components(Soft)")]
+		public static void StaticComponentsSoft ()
+		{
+			startProfile ("StaticComponents");
+			_static_soft = true;
 			new Thread (ThreadStaticComponents).Start ();
 		}
 
@@ -178,14 +196,14 @@ namespace Absir
 
 						if (value != null) {
 							//						println (">>>>>> ThreadStaticComponents " + path + "." + f.Name + " = " + value);
-							ThreadStaticComponents (path + "." + f.Name, value, staticObjects);
+							ThreadStaticComponents (path + "." + f.Name, value, staticObjects, 0);
 						}
 					});
 				}
 			}
 		}
 
-		private static bool ThreadStaticComponents (string path, object obj, List<object> staticObjects)
+		private static bool ThreadStaticComponents (string path, object obj, List<object> staticObjects, int level)
 		{
 			if (obj == null) {
 				return false;
@@ -208,29 +226,34 @@ namespace Absir
 
 				if (obj is object[]) {
 					foreach (var v in (object[])obj) {
-						if (ThreadStaticComponents (path + "[]", v, staticObjects)) {
+						if (ThreadStaticComponents (path + "[]", v, staticObjects, level + 1)) {
 							return true;
 						}
 					}
 				
 				} else if (obj is ICollection) {
 //					println (">>>>>> ThreadStaticComponents.ICollection " + path + " = " + obj);
-					foreach (var v in (ICollection)obj) {
-						if (ThreadStaticComponents (path + "[]", v, staticObjects)) {
-							return true;
+					try {
+						foreach (var v in (ICollection)obj) {
+							if (ThreadStaticComponents (path + "[]", v, staticObjects, level + 1)) {
+								return true;
+							}
 						}
+					} catch (Exception) {
 					}
 				
 				} else if (obj is IDictionary) {
 					IDictionary dict = (IDictionary)obj;
 					//ICollection keys = dict.Keys;
-					foreach (var v in dict.Values) {
-						if (ThreadStaticComponents (path + "[]", v, staticObjects)) {
-							return true;
+					try {
+						foreach (var v in dict.Values) {
+							if (ThreadStaticComponents (path + "[]", v, staticObjects, level + 1)) {
+								return true;
+							}
 						}
+					} catch (Exception) {
 					}
 				}
-
 
 				return false;
 			}
@@ -246,13 +269,27 @@ namespace Absir
 				}
 
 				println (">>>>>> ThreadStaticComponents " + path + " = " + obj.GetType ());
+				if (level > 0 || !_static_soft) {
+					return true;
+				}
+
+			} else if (obj is GameObject) {
+				try {
+					if (((GameObject)obj)) {
+						return false;
+					}
+				} catch (Exception) {
+				}
+
+				println (">>>>>> ThreadStaticComponents " + path + " = " + obj.GetType ());
 				return true;
 			}
 
+			level++;
 			bool component = false;
 			foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic)) {
 				if (!(field.IsStatic)) {
-					if (ThreadStaticComponents (path + "." + field.Name, GetFieldValue (field, obj), staticObjects)) {
+					if (ThreadStaticComponents (path + "." + field.Name, GetFieldValue (field, obj), staticObjects, level)) {
 						component = true;
 					}
 				}

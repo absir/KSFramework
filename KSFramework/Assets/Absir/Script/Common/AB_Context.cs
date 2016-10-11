@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_Context : MonoBehaviour
 	{
 		public static System.DateTime ZERO_DATE = new System.DateTime (1970, 1, 1);

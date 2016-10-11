@@ -38,13 +38,13 @@ namespace Absir
 
 		protected void addCatInvoker (T component, int index)
 		{
-			AB_Cat cat = GameObjectUtils.getGameObjectComponent<AB_Cat> (component.gameObject);
+			AB_Cat cat = GameObjectUtils.getOrAddComponent<AB_Cat> (component.gameObject);
 			cat.addCatTrigger (new CatsTrigger (this, index));
 		}
 
 		protected void setCatInvoker (T component, int index)
 		{
-			AB_Cat cat = GameObjectUtils.getGameObjectComponent<AB_Cat> (component.gameObject);
+			AB_Cat cat = GameObjectUtils.getOrAddComponent<AB_Cat> (component.gameObject);
 			CatsTrigger trigger = cat.getCatTrigger (this) as CatsTrigger;
 			if (trigger == null) {
 				cat.addCatTrigger (new CatsTrigger (this, index));

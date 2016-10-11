@@ -46,7 +46,7 @@ namespace Absir
 
 		public static T getComponentObject<T> (GameObject gameObject) where T : Object
 		{
-			foreach (Component component in  gameObject.GetComponents<Component>()) {
+			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
 					return (T)(Object)component;
 				}
@@ -58,7 +58,7 @@ namespace Absir
 		public static List<T> getComponentObjects<T> (GameObject gameObject) where T : Object
 		{
 			List<T> componentList = new List<T> ();
-			foreach (Component component in  gameObject.GetComponents<Component>()) {
+			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
 					componentList.Add ((T)(Object)component);
 				}
@@ -70,7 +70,7 @@ namespace Absir
 		public static List<T> getComponentObjectSort<T> (GameObject gameObject) where T : Component
 		{
 			List<T> componentSort = new List<T> ();
-			foreach (Component component in  gameObject.GetComponents<Component>()) {
+			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
 					addComponentSort<T> (componentSort, (T)component);
 				}

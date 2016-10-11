@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_Notification
 	{
 		public static AB_Notification ME {
@@ -20,15 +21,15 @@ namespace Absir
 
 		private static AB_Notification _ME;
 
-		private Dictionary<AB_Event, LinkedList<ActionObj<object, Action<object>, Component>>> nameDictTargetActions = new Dictionary<AB_Event, LinkedList<ActionObj<object, Action<object>, Component>>> ();
+		private Dictionary<object, LinkedList<ActionObj<object, Action<object>, Component>>> nameDictTargetActions = new Dictionary<object, LinkedList<ActionObj<object, Action<object>, Component>>> ();
 
-		private Dictionary<object, List<AB_Event>> targetDictNames = new Dictionary<object, List<AB_Event>> ();
+		private Dictionary<object, List<object>> targetDictNames = new Dictionary<object, List<object>> ();
 
 		private AB_Notification ()
 		{
 		}
 
-		public void Post (AB_Event name, object obj)
+		public void Post (object name, object obj)
 		{
 			LinkedList<ActionObj<object, Action<object>, Component>> targetActions = null;
 			nameDictTargetActions.TryGetValue (name, out targetActions);
@@ -55,12 +56,12 @@ namespace Absir
 			}
 		}
 
-		public void AddObserve (object target, AB_Event name, Action<object> action)
+		public void AddObserve (object target, object name, Action<object> action)
 		{
-			List<AB_Event> names = null;
+			List<object> names = null;
 			targetDictNames.TryGetValue (target, out names);
 			if (names == null) {
-				names = new List<AB_Event> ();
+				names = new List<object> ();
 				targetDictNames.Add (target, names);
 			
 			} else {
@@ -83,7 +84,7 @@ namespace Absir
 
 		public void RemoveObserve (object target)
 		{
-			List<AB_Event> names = null;
+			List<object> names = null;
 			targetDictNames.TryGetValue (target, out names);
 			if (names != null) {
 				targetDictNames.Remove (target);
@@ -93,12 +94,12 @@ namespace Absir
 			}
 		}
 
-		public void RemoveObserveName (object target, AB_Event name)
+		public void RemoveObserveName (object target, object name)
 		{
 			RemoveObserveNameCheck (target, name, true);
 		}
 
-		private void RemoveObserveNameCheck (object target, AB_Event name, bool checkClear)
+		private void RemoveObserveNameCheck (object target, object name, bool checkClear)
 		{
 			LinkedList<ActionObj<object, Action<object>, Component>> targetActions = null;
 			nameDictTargetActions.TryGetValue (name, out targetActions);
@@ -109,7 +110,7 @@ namespace Absir
 					if (actionObj.t1 == target) {
 						targetActions.Remove (node);
 						if (checkClear) {
-							List<AB_Event> names = null;
+							List<object> names = null;
 							targetDictNames.TryGetValue (target, out names);
 							if (names != null) {
 								if (names.Remove (name) && names.Count == 0) {
