@@ -25,6 +25,12 @@ namespace KSFramework
 
         public static LuaBehaviour Create(GameObject attach, string luaPath)
         {
+			// only one same lua behaviour can attach
+			foreach (var b in attach.GetComponents<LuaBehaviour>())
+			{
+				if (b.LuaPath == luaPath)
+					return b;
+			}
             var behaviour = attach.AddComponent<LuaBehaviour>();
             behaviour.LuaPath = luaPath;
             behaviour.Awake();
@@ -72,7 +78,7 @@ namespace KSFramework
             if (!string.IsNullOrEmpty(LuaPath))
             {
                 Init();
-                CallLuaFunction("Awake");
+				CallLuaFunction("Awake", _cacheTable, this);
             } // else Null Lua Path, pass Awake!
         }
 
@@ -90,6 +96,11 @@ namespace KSFramework
         {
             CallLuaFunction("LateUpdate");
         }
+
+		protected void OnDestroy()
+		{
+			CallLuaFunction ("OnDestroy", _cacheTable, this);
+		}
     }
 
 }
