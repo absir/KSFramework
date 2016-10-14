@@ -80,19 +80,19 @@ namespace Absir
 			#endif
 		}
 
-		public static string LuaBehaviourPath (string name)
+		public static string LuaBehaviourPath (string lua)
 		{
-			return name.Contains ("/") ? name : ("Behaviour/" + name);
+			return lua.Contains ("/") ? lua : ("Behaviour/" + lua);
 		}
 
-		public static bool LoadLuaBehaviour (string name, out LuaTable luaTable, bool showWarn, Component component)
+		public static bool LoadLuaBehaviour (string lua, out LuaTable luaTable, bool showWarn, Component component)
 		{
 			luaTable = null;
-			if (string.IsNullOrEmpty (name)) {
+			if (string.IsNullOrEmpty (lua)) {
 				return false;
 			}
 
-			var relPath = LuaBehaviourPath (name);
+			var relPath = LuaBehaviourPath (lua);
 			var luaModule = KSGame.Instance.LuaModule;
 			object scriptResult;
 			if (!luaModule.TryImport (relPath, out scriptResult)) {
@@ -102,7 +102,7 @@ namespace Absir
 			}
 
 			scriptResult = KSGame.Instance.LuaModule.CallScript (relPath);
-			KEngine.Debuger.Assert (scriptResult is LuaTable, "{0} Script Must Return Lua Table with functions!", name);
+			KEngine.Debuger.Assert (scriptResult is LuaTable, "{0} Script Must Return Lua Table with functions!", lua);
 
 			luaTable = scriptResult as LuaTable;
 
@@ -129,7 +129,7 @@ namespace Absir
 			}
 
 			var luaInitObj = luaTable ["OnInit"];
-			//Debuger.Assert (luaInitObj is LuaFunction, "Must have OnInit function - {0}", name);
+			//Debuger.Assert (luaInitObj is LuaFunction, "Must have OnInit function - {0}", lua);
 			if (luaInitObj != null) {
 				(luaInitObj as LuaFunction).call (luaTable, component);
 			}
@@ -149,9 +149,9 @@ namespace Absir
 			return null;
 		}
 
-		public static void ReloadLuaBehaviour (string name)
+		public static void ReloadLuaBehaviour (string lua)
 		{
-			var relPath = LuaBehaviourPath (name);
+			var relPath = LuaBehaviourPath (lua);
 			var luaModule = KSFramework.KSGame.Instance.LuaModule;
 			luaModule.ClearCache (relPath);
 			Brige.ME.LogWarn ("Reload Lua: " + relPath);
