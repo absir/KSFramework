@@ -3,6 +3,7 @@ using System.Collections;
 using KEngine;
 using KEngine.UI;
 
+[System.Obsolete ("Use SceneManager to determine what scenes have been loaded")]
 public class AB_Load : MonoBehaviour {
 
 	public string url;
@@ -13,6 +14,12 @@ public class AB_Load : MonoBehaviour {
 	}
 
 	protected void Load() {
-		SceneLoader loader = SceneLoader.Load (url);
+		string loadedName = Application.loadedLevelName;
+		Debug.Log ("AB_Load loadedName : " + loadedName + " => " + url);
+		SceneLoader.Load (url, (success)=> {
+			if(success) {
+				Application.UnloadLevel (loadedName);
+			}
+		}, LoaderMode.Async);
 	}
 }
