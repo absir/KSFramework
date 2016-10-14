@@ -174,6 +174,7 @@ namespace SLua
 			    "EventProvider",
 			    "Apple",
 			    "ClusterInput",
+				"Windows",
             };
         }
     }
