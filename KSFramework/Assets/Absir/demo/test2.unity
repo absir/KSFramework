@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87dfd6a1c6fa54f9082284000cb7dfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: TestScene/TestScene
+  url: scene/testscene/testscene.unity
 --- !u!4 &1156763162
 Transform:
   m_ObjectHideFlags: 0
