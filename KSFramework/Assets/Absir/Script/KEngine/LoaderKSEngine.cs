@@ -31,7 +31,7 @@ namespace Absir
 		protected override void OnFinish (object resultObj)
 		{
 			base.OnFinish (resultObj);
-			Release ();
+			OnReadyDisposed ();
 		}
 	}
 
@@ -39,7 +39,6 @@ namespace Absir
 	[SLua.GenLuaName]
 	public class AB_SceneLoader : SceneLoader
 	{
-
 		public AB_SceneLoader (string url, LoaderDelgate callback, LoaderMode mode)
 		{
 			if (string.IsNullOrEmpty (url)) {

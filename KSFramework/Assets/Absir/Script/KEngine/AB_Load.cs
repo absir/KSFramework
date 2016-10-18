@@ -68,10 +68,12 @@ namespace Absir
 			string loadedName = activeScene.name;
 			//string loadedName = Application.loadedLevelName;
 			Debug.Log ("AB_Load load at : " + loadedName + " to " + sceneUrl);
+			AB_Game.LoginWaite ("AB_Load");
 			unloadAction = () => {
 				Debug.Log ("AB_Load unload " + loadedName);
 				SceneManager.UnloadScene (activeScene);
 				//Application.UnloadLevel (loadedName);
+				AB_Game.LogicComplete ("AB_Load");
 			};
 
 			int sceneCount = SceneManager.sceneCount;

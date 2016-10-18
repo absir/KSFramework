@@ -35,37 +35,18 @@ using KSFramework;
 
 using Absir;
 
-public class Game : KSGame
+public class Game : AB_Init
 {
-	/// <summary>
-	/// Add Your Custom Initable(Coroutine) Modules Here...
-	/// </summary>
-	/// <returns></returns>
-	protected override IList<IModuleInitable> CreateModules ()
+	protected override void InitStart ()
 	{
-		var modules = base.CreateModules ();
-
-		// TIP: Add Your Custom Module here
-		//modules.Add(new Module());
-
-		return modules;
-	}
-
-	/// <summary>
-	/// Before Init Modules, coroutine
-	/// </summary>
-	/// <returns></returns>
-	public override IEnumerator OnBeforeInit ()
-	{
-		// Do Nothing
-		yield break;
+		StartCoroutine (OnGameStart ());
 	}
 
 	/// <summary>
 	/// After Init Modules, coroutine
 	/// </summary>
 	/// <returns></returns>
-	public override IEnumerator OnGameStart ()
+	public  IEnumerator OnGameStart ()
 	{
 
 		// Print AppConfigs
