@@ -5,34 +5,38 @@ using KEngine;
 
 namespace Absir
 {
-	public class AB_AssetLoader : AssetBundleLoader
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
+	public class AB_AssetLoader : AssetFileLoader
 	{
-		public static AB_AssetLoader load (string url, LoaderDelgate callback)
+		public static AB_AssetLoader load (string url, AssetFileBridgeDelegate callback)
 		{
 			return new AB_AssetLoader (url, callback, LoaderMode.Sync);
 		}
 
-		public AB_AssetLoader (string url, LoaderDelgate callback, LoaderMode mode)
+		public AB_AssetLoader (string url, AssetFileBridgeDelegate callback, LoaderMode mode)
 		{
 			if (string.IsNullOrEmpty (url)) {
 				Log.Error ("[AB_SceneLoad:New]url为空");
 			}
 
-			IsForceNew = true;
 			Init (url, mode);
-			AddCallback (callback);
+			LoaderDelgate newCallback = null;
+			if (callback != null) {
+				newCallback = (isOk, obj) => callback (isOk, obj as Object);
+				AddCallback (newCallback);
+			}
 		}
 
 		protected override void OnFinish (object resultObj)
 		{
 			base.OnFinish (resultObj);
-			AssetFileLoader loader = resultObj as AssetFileLoader;
-			if (loader != null) {
-				loader.Release ();
-			}
+			Release ();
 		}
 	}
 
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_SceneLoader : SceneLoader
 	{
 
@@ -41,8 +45,7 @@ namespace Absir
 			if (string.IsNullOrEmpty (url)) {
 				Log.Error ("[AB_SceneLoad:New]url为空");
 			}
-
-			IsForceNew = true;
+				
 			Init (url, mode);
 			AddCallback (callback);
 		}

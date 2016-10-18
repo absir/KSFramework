@@ -4,38 +4,47 @@ using System.Collections.Generic;
 using KEngine;
 using KEngine.UI;
 using KSFramework;
+using UnityEngine.SceneManagement;
 
 namespace Absir
 {
-
 	[System.Obsolete ("Use SceneManager to determine what scenes have been loaded")]
 	public class AB_Load : MonoBehaviour
 	{
-		public string loadUrl;
+		public string loadUrl = "Prefab/Splash.prefab.k";
 
-		public string sceneUrl;
+		public string sceneUrl = "Scene/Main.unity";
 
-		public bool unloadWaite;
+		public float unloadDelay = 3.0f;
+
+		private bool unloadWaite;
 
 		private Action unloadAction;
 
 		void Awake ()
 		{
 			AB_Init.Init (false);
-			Load ();
+			AB_Game.AddGameStartAction (Load);
 		}
 
 		protected void Load ()
 		{
-			if (string.IsNullOrEmpty (sceneUrl)) {
-				return;
-			}
-
 			if (!string.IsNullOrEmpty (loadUrl)) {
 				bool contain = KResourceModule.ContainsResourceUrl (loadUrl);
 				Debug.Log ("AB_Load loadUrl " + loadUrl + " contain " + contain);
 				if (contain) {
 					new AB_AssetLoader (loadUrl, (ok, result) => {
+						Debug.Log ("AB_Load load result " + ok + " : " + result);
+						if (!ok || result == null) {
+							unloadDelay = 0;
+
+						} else {
+							Instantiate (result);
+							if (unloadDelay > 0) {
+								StartCoroutine (UnloadDelay ());
+							}
+						}
+
 						LoadScene ();
 
 					}, LoaderMode.Sync);
@@ -44,19 +53,33 @@ namespace Absir
 				}
 			} 
 
+			unloadDelay = 0;
 			LoadScene ();
 		}
 
 		protected void LoadScene ()
 		{
-			string loadedName = Application.loadedLevelName;
+			if (string.IsNullOrEmpty (sceneUrl)) {
+				return;
+			}
+
+			//string loadedName = Application.loadedLevelName;
+			Scene activeScene = SceneManager.GetActiveScene ();
+			string loadedName = activeScene.name;
+			//string loadedName = Application.loadedLevelName;
 			Debug.Log ("AB_Load load at : " + loadedName + " to " + sceneUrl);
 			unloadAction = () => {
 				Debug.Log ("AB_Load unload " + loadedName);
-				Application.UnloadLevel (loadedName);
+				SceneManager.UnloadScene (activeScene);
+				//Application.UnloadLevel (loadedName);
 			};
 
+			int sceneCount = SceneManager.sceneCount;
 			new AB_SceneLoader (sceneUrl, (ok, result) => {
+				if (result != null) {
+					SceneManager.SetActiveScene (SceneManager.GetSceneAt (sceneCount));
+				}
+
 				if (!unloadWaite) {
 					UnloadAction ();
 				}
@@ -66,6 +89,7 @@ namespace Absir
 
 		public void UnloadWaite ()
 		{
+			Log.Info ("UnloadWaite");
 			unloadWaite = true;
 		}
 
@@ -77,9 +101,24 @@ namespace Absir
 			}
 		}
 
+		protected IEnumerator UnloadDelay ()
+		{
+			if (unloadDelay > 0) {
+				yield return new WaitForSeconds (unloadDelay);
+				//Debug.Log ("UnloadDelay Done");
+				unloadDelay = 0;
+			}
+		}
+
 		protected IEnumerator UnloadActionDelay (Action unloadAction)
 		{
 			yield return 0;
+			//Debug.Log ("UnloadActionDelay " + unloadDelay);
+			while (unloadDelay > 0) {
+				yield return 0;
+			}
+
+			//Debug.Log ("UnloadActionDelay Done");
 			unloadAction ();
 		}
 	}
