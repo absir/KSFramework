@@ -5,13 +5,11 @@ using System.Collections.Generic;
 namespace Absir
 {
 	#if UNITY_EDITOR
-	[ExecuteInEditMode]
-	public class AB_Sort : MonoBehaviour
+	public class AB_Sort : AB_Tool
 	{
 		public double behindZ = 0;
 
-		// Use this for initialization
-		void Start ()
+		public override IEnumerator doTrigger ()
 		{
 			List<GameObject> gameObjectSort = GameObjectUtils.getChildrenGameObjectSort (gameObject);
 			float behind = (float)behindZ;
@@ -23,6 +21,8 @@ namespace Absir
 				trans.localPosition = localPosition;
 				behind += AB_UI.BEHIND_STEP;
 			}
+
+			yield break;
 		}
 	}
 	#endif

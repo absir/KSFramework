@@ -6,7 +6,7 @@ namespace Absir
 {
 	public class GameObjectUtils
 	{
-		public static bool S_UNITY_HAS_CHILDREN = true;
+		public static bool S_UNITY_HAS_CHILDREN = false;
 
 		public static T getOrAddComponent<T> (GameObject gameObject) where T : Component
 		{

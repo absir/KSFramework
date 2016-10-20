@@ -92,12 +92,12 @@ namespace Absir
 			}
 		}
 
-		void OnClick ()
+		public void OnClick ()
 		{
 			OnTrigger (null);	
 		}
 
-		void OnTrigger (object trigger)
+		public void OnTrigger (object trigger)
 		{
 			foreach (CatTrigger catTrigger in catTriggers) {
 				if (trigger == null) {

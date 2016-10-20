@@ -31,7 +31,7 @@ namespace Absir
 		protected override void OnFinish (object resultObj)
 		{
 			base.OnFinish (resultObj);
-			OnReadyDisposed ();
+			DoDispose ();
 		}
 	}
 

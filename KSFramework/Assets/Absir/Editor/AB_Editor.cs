@@ -52,8 +52,12 @@ namespace Absir
 					newAssetTransform.localPosition = Vector3.zero;
 					newAssetTransform.localScale = Vector3.one;
 
-					foreach(Transform child in asset.transform) {
-						child.transform.parent = newAssetTransform;
+					foreach (Transform child in asset.transform) {
+						Vector3 localPosition = child.localPosition;
+						Vector3 localScale = child.localScale;
+						child.parent = newAssetTransform;
+						child.localPosition = localPosition;
+						child.localScale = localScale;
 					}
 						
 					GameObject.DestroyImmediate (asset.gameObject);

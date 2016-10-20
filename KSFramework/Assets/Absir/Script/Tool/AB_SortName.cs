@@ -5,21 +5,20 @@ using System.Collections.Generic;
 namespace Absir
 {
 	#if UNITY_EDITOR
-	[ExecuteInEditMode]
-	public class AB_SortName : MonoBehaviour
+	public class AB_SortName : AB_Tool
 	{
 		public string sortName;
+
 		public int sortLength = 2;
-	
-		// Use this for initialization
-		void Start ()
+
+		public override IEnumerator doTrigger ()
 		{
 			if (sortName != null) {
 				if (sortName.Trim ().Length == 0) {
 					sortName = null;
 				}
 			}
-		
+
 			string sortFormate = "{0:D" + sortLength.ToString () + "}";
 			Dictionary<string, int> nameSorts = new Dictionary<string, int> ();
 			Dictionary<string, GameObject> nameGameObjects = new Dictionary<string, GameObject> ();
@@ -47,6 +46,9 @@ namespace Absir
 					go.name = sortName + string.Format (sortFormate, sortIndex++);
 				}
 			}
+
+
+			yield break;
 		}
 	}
 	#endif

@@ -11,7 +11,7 @@ namespace Absir
 		public static System.DateTime ZERO_DATE = new System.DateTime (1970, 1, 1);
 
 		// 定时时间
-		public System.DateTime contextDate;
+		public System.DateTime contextDate { get; protected set; }
 
 		public long contextTime;
 
@@ -34,6 +34,27 @@ namespace Absir
 		private List<ActionObj<long, Action, bool>> addScheduleActions = new List<ActionObj<long, Action, bool>> ();
 
 		private LinkedList<ActionObj<long, Action, bool>> scheduleActionQueue = new LinkedList<ActionObj<long, Action, bool>> ();
+
+		public static void DelayAction (float delay, Action action)
+		{
+			if (action == null) {
+				return;
+			}
+
+			AB_Context.ME.StartCoroutine (DelayActionEnumerator (delay, action));
+		}
+
+		public static IEnumerator DelayActionEnumerator (float delay, Action action)
+		{
+			if (delay > 0) {
+				yield return new WaitForSeconds (delay);
+			
+			} else {
+				yield return 0;
+			}
+
+			action ();
+		}
 
 		public void AddAction (Action action, int deplete = 0)
 		{
@@ -105,7 +126,7 @@ namespace Absir
 		private void CalTime ()
 		{
 			contextDate = System.DateTime.Now;
-			contextTime = contextDate.Ticks / 10;
+			contextTime = contextDate.Ticks / 10000;
 		}
 
 		protected void CalcMore ()
@@ -194,6 +215,9 @@ namespace Absir
 		private void threadContext ()
 		{
 			while (true) {
+				System.Threading.Thread.Sleep (1000);
+				CalTime ();
+
 				if (addDelayActions.Count > 0) {
 					lock (addDelayActions) {
 						foreach (var action in addDelayActions) {
@@ -229,7 +253,6 @@ namespace Absir
 						}
 					}
 
-					CalTime ();
 					long time = contextTime;
 					{
 						// 定时执行全部检测
@@ -259,8 +282,6 @@ namespace Absir
 							}
 						}
 					}
-
-					System.Threading.Thread.Sleep (1000);
 				}
 			}
 		}

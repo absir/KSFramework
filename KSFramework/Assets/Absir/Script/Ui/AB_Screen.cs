@@ -47,6 +47,11 @@ namespace Absir
 		// Use this for initialization
 		public void Awake ()
 		{
+			CalcScreen ();
+		}
+
+		public void CalcScreen ()
+		{
 			if (uiCamera == null) {
 				uiCamera = ComponentUtils.fetchParentComponent<Camera> (gameObject);
 				if (uiCamera == null) {
@@ -95,6 +100,7 @@ namespace Absir
 			}
 
 			scaleOffset = calcScreenRationScaleOffset (size, style);
+			Debug.Log ("scaleOffset = " + TransformUtils.getVector2String (scaleOffset));
 		}
 
 		private static bool _calcRatio;
@@ -135,10 +141,10 @@ namespace Absir
 			//Debug.Log (TransformUtils.getVector3String(_lt.transform.localPosition));
 			_calcScaleOffset = new Vector2 (localPosition.x - size.x / 2.0f, localPosition.y - size.y / 2.0f);
 
-			Debug.Log ("_calcScaleOffset = " + TransformUtils.getVector2String (_calcScaleOffset));
-
 			ScaleOffsetX = _calcScaleOffset.x;
 			ScaleOffsetY = _calcScaleOffset.y;
+
+			DestroyImmediate (_lt);
 			return _calcScaleOffset;
 		}
 	}

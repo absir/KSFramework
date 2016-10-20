@@ -40,6 +40,11 @@ namespace Absir
 		{
 			AB_Cat cat = GameObjectUtils.getOrAddComponent<AB_Cat> (component.gameObject);
 			cat.addCatTrigger (new CatsTrigger (this, index));
+			bindCat (cat, component);
+		}
+
+		protected virtual void bindCat (AB_Cat cat, T component)
+		{
 		}
 
 		protected void setCatInvoker (T component, int index)

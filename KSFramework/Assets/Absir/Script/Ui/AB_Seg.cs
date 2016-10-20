@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
-	public class AB_Seg : AB_Cats<BoxCollider>
+	public class AB_Seg : AB_Cats<Button>
 	{
 		protected int activeComponentIndex;
 
@@ -24,6 +25,11 @@ namespace Absir
 			}
 		}
 
+		protected override void bindCat (AB_Cat cat, Button component)
+		{
+			component.onClick.AddListener (cat.OnClick);
+		}
+
 		override public bool setActiveComponentIndex (int componentIndex)
 		{
 			if (base.setActiveComponentIndex (componentIndex)) {
@@ -38,20 +44,20 @@ namespace Absir
 			return false;
 		}
 
-		override protected bool isComponentActive (BoxCollider component)
+		override protected bool isComponentActive (Button component)
 		{
-			return !component.enabled;
+			return !component.interactable;
 		}
 
-		override protected void setComponentActive (BoxCollider component, bool active)
+		override protected void setComponentActive (Button component, bool active)
 		{
 			if (active) {
-				component.gameObject.SendMessage ("OnPress", true);
-				component.enabled = false;
+				//component.gameObject.SendMessage ("OnPress", true);
+				component.interactable = false;
 			
 			} else {
-				component.enabled = true;
-				component.gameObject.SendMessage ("OnPress", false);
+				component.interactable = true;
+				//component.gameObject.SendMessage ("OnPress", false);
 			}
 		}
 	}

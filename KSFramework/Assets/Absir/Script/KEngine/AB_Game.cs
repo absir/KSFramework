@@ -18,11 +18,20 @@ namespace Absir
 
 		private static List<Action> onLogicStartActions = new List<Action> ();
 
-		public static void RunActions (List<Action> actions)
+		public static void RunActions (List<Action> actions, Action complete)
 		{
-			try {
-				int count = 0;
-				for (int i = 0; i < count || (i < (count = actions.Count)); i++) {
+			KResourceModule.Instance.StartCoroutine (RunActionsEnumerator (actions, complete));
+		}
+
+		public static IEnumerator RunActionsEnumerator (List<Action> actions, Action complete)
+		{
+			while (true) {
+				int count = actions.Count;
+				if (count <= 0) {
+					break;
+				}
+
+				for (int i = 0; i < count; i++) {
 					try {
 						actions [i] ();
 
@@ -31,8 +40,12 @@ namespace Absir
 					}
 				}
 
-			} catch (System.Exception e) {
-				Log.Error ("RunActions Exception " + e);
+				actions.RemoveRange (0, count);
+				yield return 0;
+			}
+
+			if (complete != null) {
+				complete ();
 			}
 		}
 
@@ -89,8 +102,9 @@ namespace Absir
 
 			} else {
 				if (onLogicStartActions != null) {
-					RunActions (onLogicStartActions);
-					onLogicStartActions = null;
+					RunActions (onLogicStartActions, () => {
+						onLogicStartActions = null;
+					});
 				}
 			}
 		}
@@ -104,7 +118,7 @@ namespace Absir
 		{
 			yield return 0;
 			if (onBeforeActions != null) {
-				RunActions (onBeforeActions);
+				yield return RunActionsEnumerator (onBeforeActions, null);
 				onBeforeActions = null;
 			}
 		}
@@ -113,7 +127,7 @@ namespace Absir
 		{
 			yield return 0;
 			if (onGameStartActions != null) {
-				RunActions (onGameStartActions);
+				yield return RunActionsEnumerator (onGameStartActions, null);
 				onGameStartActions = null;
 			}
 		}
