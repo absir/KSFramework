@@ -248,3 +248,27 @@ _Pvt_Extensions
 
 
 /KSFramework/Assets/StreamingAssets/Setting
+
+#Mac Templete
+.DS_Store
+.idea
+
+/Templete/Assets/Plugins/Editor/KEngineEditor
+/Templete/Assets/Plugins/KEngine
+/Templete/Assets/Plugins/Slua_Managed
+/Templete/Library
+/Templete/Temp
+/Templete/*.csproj
+/Templete/*.sln
+/Templete/Assets/SLua/LuaObject
+/Templete/Assets/UnityTestTools
+/Templete/Assets/StreamingAssets/Bundles
+/Templete/Assets/StreamingAssets/Lua
+/Templete/Assets/StreamingAssets/**/*.meta
+/Templete/Product/**/*.meta
+*UnityVS*
+
+
+/Templete/Assets/StreamingAssets/Setting
+
+/Projects/*
