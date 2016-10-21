@@ -20,12 +20,13 @@ namespace Absir
 				Log.Error ("[AB_SceneLoad:New]url为空");
 			}
 
-			Init (url, mode);
 			LoaderDelgate newCallback = null;
 			if (callback != null) {
 				newCallback = (isOk, obj) => callback (isOk, obj as Object);
 				AddCallback (newCallback);
 			}
+
+			Init (url, mode);
 		}
 
 		protected override void OnFinish (object resultObj)
@@ -45,8 +46,8 @@ namespace Absir
 				Log.Error ("[AB_SceneLoad:New]url为空");
 			}
 				
-			Init (url, mode);
 			AddCallback (callback);
+			Init (url, mode);
 		}
 
 		protected override void OnFinish (object resultObj)

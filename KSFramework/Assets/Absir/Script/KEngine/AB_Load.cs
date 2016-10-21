@@ -8,10 +8,10 @@ using UnityEngine.SceneManagement;
 
 namespace Absir
 {
-	[System.Obsolete ("Use SceneManager to determine what scenes have been loaded")]
+	//[System.Obsolete ("Use SceneManager to determine what scenes have been loaded")]
 	public class AB_Load : MonoBehaviour
 	{
-		public string loadUrl = "Prefab/Splash.prefab.k";
+		public string loadUrl = "prefab/splash.prefab.k";
 
 		public string sceneUrl = "Scene/Main.unity";
 
