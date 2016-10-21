@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 2158741651
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: prefab/splash.prefab.k
+      Dependencies: {}
+    Info_1:
+      Name: scene/main.unity.k
+      Dependencies: {}
