@@ -11,7 +11,7 @@ namespace Absir
 
 		public int sortLength = 2;
 
-		public override IEnumerator doTrigger ()
+		public override IEnumerator DoTrigger ()
 		{
 			if (sortName != null) {
 				if (sortName.Trim ().Length == 0) {
@@ -23,7 +23,7 @@ namespace Absir
 			Dictionary<string, int> nameSorts = new Dictionary<string, int> ();
 			Dictionary<string, GameObject> nameGameObjects = new Dictionary<string, GameObject> ();
 			int sortIndex = 0;
-			foreach (GameObject go in GameObjectUtils.getChildrenGameObjectSort(gameObject)) {
+			foreach (GameObject go in GameObjectUtils.GetChildrenGameObjectSort(gameObject)) {
 				string goname = go.name;
 				if (sortName == null) {
 					if (nameSorts.ContainsKey (goname)) {

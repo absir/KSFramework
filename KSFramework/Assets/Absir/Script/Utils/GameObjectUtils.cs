@@ -8,12 +8,12 @@ namespace Absir
 	{
 		public static bool S_UNITY_HAS_CHILDREN = false;
 
-		public static T getOrAddComponent<T> (GameObject gameObject) where T : Component
+		public static T GetOrAddComponent<T> (GameObject gameObject) where T : Component
 		{
-			return getOrAddComponent<T, T> (gameObject);
+			return GetOrAddComponent<T, T> (gameObject);
 		}
 
-		public static T getOrAddComponent<T, K> (GameObject gameObject) where T : Component where K : T
+		public static T GetOrAddComponent<T, K> (GameObject gameObject) where T : Component where K : T
 		{
 			T component = gameObject.GetComponent<T> ();
 			if (component == null) {
@@ -23,7 +23,7 @@ namespace Absir
 			return component;
 		}
 
-		public static void addGameObjectSort (List<GameObject> gameObjectSort, GameObject gameObject)
+		public static void AddGameObjectSort (List<GameObject> gameObjectSort, GameObject gameObject)
 		{
 			if (S_UNITY_HAS_CHILDREN) {
 				string name = gameObject.name;
@@ -39,12 +39,12 @@ namespace Absir
 			gameObjectSort.Add (gameObject);
 		}
 
-		public static List<GameObject> getGameObjectSort (List<GameObject> gameObjectList)
+		public static List<GameObject> GetGameObjectSort (List<GameObject> gameObjectList)
 		{
 			if (S_UNITY_HAS_CHILDREN) {
 				List<GameObject> gameObjectSort = new List<GameObject> (gameObjectList.Count);
 				foreach (GameObject gameObject in gameObjectList) {
-					addGameObjectSort (gameObjectSort, gameObject);
+					AddGameObjectSort (gameObjectSort, gameObject);
 				}
 				return gameObjectSort;
 
@@ -53,32 +53,32 @@ namespace Absir
 			}
 		}
 
-		public static List<GameObject> getChildrenGameObjectSort (GameObject gameObject)
+		public static List<GameObject> GetChildrenGameObjectSort (GameObject gameObject)
 		{
 			List<GameObject> gameObjectSort = new List<GameObject> ();
 			foreach (Transform child in gameObject.transform) {
-				addGameObjectSort (gameObjectSort, child.gameObject);
+				AddGameObjectSort (gameObjectSort, child.gameObject);
 			}
 		
 			return gameObjectSort;
 		}
 
-		public static List<T> getChildrenGameObjectComponentSort<T> (GameObject gameObject) where T : Component
+		public static List<T> GetChildrenGameObjectComponentSort<T> (GameObject gameObject) where T : Component
 		{
-			return getChildrenGameObjectComponentSort<T, T> (gameObject);
+			return GetChildrenGameObjectComponentSort<T, T> (gameObject);
 		}
 
-		public static List<T> getChildrenGameObjectComponentSort<T, K> (GameObject gameObject) where T : Component where K : T
+		public static List<T> GetChildrenGameObjectComponentSort<T, K> (GameObject gameObject) where T : Component where K : T
 		{
 			List<T> componentSort = new List<T> ();
 			foreach (Transform child in gameObject.transform) {
-				ComponentUtils.addComponentSort (componentSort, getOrAddComponent<T, K> (child.gameObject));
+				ComponentUtils.AddComponentSort (componentSort, GetOrAddComponent<T, K> (child.gameObject));
 			}
 		
 			return componentSort;
 		}
 
-		public static GameObject fetchParentGameObject (GameObject gameObject, string name)
+		public static GameObject FetchParentGameObject (GameObject gameObject, string name)
 		{
 			Transform transform = gameObject.transform;
 			while (transform != null) {
@@ -92,14 +92,14 @@ namespace Absir
 			return null;
 		}
 
-		public static GameObject fetchChildrenGameObject (GameObject gameObject, string name)
+		public static GameObject FetchChildrenGameObject (GameObject gameObject, string name)
 		{
 			if (gameObject.name.Equals (name)) {
 				return gameObject;
 			}
 		
 			foreach (Transform child in gameObject.transform) {
-				gameObject = fetchChildrenGameObject (child.gameObject, name);
+				gameObject = FetchChildrenGameObject (child.gameObject, name);
 				if (gameObject != null) {
 					return gameObject;
 				}

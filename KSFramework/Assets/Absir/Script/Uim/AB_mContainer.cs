@@ -9,7 +9,7 @@ namespace Absir
 	{
 		public Transform containerTrans;
 
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
 			if (containerTrans == null) {
 				containerTrans = gameObject.transform;

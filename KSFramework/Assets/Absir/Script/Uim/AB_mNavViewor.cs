@@ -12,85 +12,85 @@ namespace Absir
 
 		protected List<AB_Viewor> listViewors;
 
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
-			base.initComponent ();
-			listViewors = GameObjectUtils.getChildrenGameObjectComponentSort<AB_Viewor> (containerTrans.gameObject);
+			base.InitComponent ();
+			listViewors = GameObjectUtils.GetChildrenGameObjectComponentSort<AB_Viewor> (containerTrans.gameObject);
 		
 			int count = listViewors.Count;
 			if (count > 0) {
 				foreach (AB_Viewor viewor in listViewors) {
-					GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).retain ();
-					AB_UI.ME.removeView (viewor.gameObject.transform);
+					GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Retain ();
+					AB_UI.ME.RemoveView (viewor.gameObject.transform);
 				}
 			
-				listViewors [count - 1].doAppearTransform (containerTrans);
-				display ();
+				listViewors [count - 1].DoAppearTransform (containerTrans);
+				Display ();
 			}
 		}
 
-		public void display ()
+		public void Display ()
 		{
 			if (naviationBar != null) {
-				naviationBar.display (listViewors);
+				naviationBar.Display (listViewors);
 			}
 		}
 
-		public void pushViewor (AB_Viewor viewor)
+		public void PushViewor (AB_Viewor viewor)
 		{
 			int count = listViewors.Count;
 			if (count > 0) {
-				listViewors [count - 1].doDisappearTransform ();
+				listViewors [count - 1].DoDisappearTransform ();
 			}
 		
-			GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).retain ();
+			GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Retain ();
 			listViewors.Add (viewor);
-			viewor.doAppearTransform (containerTrans);
-			display ();
+			viewor.DoAppearTransform (containerTrans);
+			Display ();
 		}
 
-		public void popViewor ()
+		public void PopViewor ()
 		{
 			int count = listViewors.Count;
 			if (count > 1) {
 				count = count - 1;
 				AB_Viewor viewor = listViewors [count];
-				GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).release ();
-				viewor.doDisappearTransform ();
+				GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Release ();
+				viewor.DoDisappearTransform ();
 				listViewors.RemoveAt (count);
 			
-				listViewors [count - 1].doAppearTransform (containerTrans);
-				display ();
+				listViewors [count - 1].DoAppearTransform (containerTrans);
+				Display ();
 			}
 		}
 
-		public void pushGameObject (GameObject go)
+		public void PushGameObject (GameObject go)
 		{
-			pushViewor (GameObjectUtils.getOrAddComponent<AB_Viewor> (go));
+			PushViewor (GameObjectUtils.GetOrAddComponent<AB_Viewor> (go));
 		}
 
-		public void popVieworRoot ()
+		public void PopVieworRoot ()
 		{		
 			int count = listViewors.Count;
 			if (count > 1) {
 				for (--count; count > 0; count--) {
 					AB_Viewor viewor = listViewors [count];
-					GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).release ();
-					viewor.doDisappearTransform ();
+					GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Release ();
+					viewor.DoDisappearTransform ();
 				}
 			
 				listViewors.RemoveRange (1, listViewors.Count - 1);
 			
-				listViewors [0].doAppearTransform (containerTrans);
-				display ();
+				listViewors [0].DoAppearTransform (containerTrans);
+				Display ();
 			}
 		}
 
-		public override bool doAppear ()
+		public override bool DoAppear ()
 		{
-			if (base.doAppear ()) {
+			if (base.DoAppear ()) {
 				if (listViewors != null) {
-					listViewors [listViewors.Count - 1].doAppear ();
+					listViewors [listViewors.Count - 1].DoAppear ();
 				}
 
 				return true;
@@ -99,11 +99,11 @@ namespace Absir
 			return false;
 		}
 
-		public override bool doDisappear ()
+		public override bool DoDisappear ()
 		{
-			if (base.doDisappear ()) {
+			if (base.DoDisappear ()) {
 				if (listViewors != null) {
-					listViewors [listViewors.Count - 1].doDisappear ();
+					listViewors [listViewors.Count - 1].DoDisappear ();
 				}
 			
 				return true;
@@ -112,18 +112,22 @@ namespace Absir
 			return false;
 		}
 
-		public void doDisappearTransform ()
+		override public bool DoDisappearTransform ()
 		{
-			if (base.doDisappearTransform ()) {
+			if (base.DoDisappearTransform ()) {
 				if (listViewors != null) {
 					foreach (AB_Viewor viewor in listViewors) {
-						GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).release ();
-						viewor.doDisappearTransform ();
+						GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Release ();
+						viewor.DoDisappearTransform ();
 					}
 
 					listViewors.Clear ();
 				}
+
+				return true;
 			}
+
+			return false;
 		}
 	}
 }

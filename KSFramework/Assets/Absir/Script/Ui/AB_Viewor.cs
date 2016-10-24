@@ -8,7 +8,11 @@ namespace Absir
 	[SLua.GenLuaName]
 	public class AB_Viewor : AB_Bas
 	{
-		public MonoBehaviour holder;
+		public const string _ViewDidAppear = "ViewDidAppear";
+
+		public const string _ViewDidDisappear = "ViewDidDisappear";
+
+		public AB_Call call;
 
 		//public bool appeared { get; private set; }
 
@@ -16,7 +20,15 @@ namespace Absir
 
 		private AB_Viewor child;
 
-		public virtual bool doAppear ()
+		override protected void InitComponent ()
+		{
+			base.InitComponent ();
+			if (call != null) {
+				call = ComponentUtils.GetComponentObject<AB_Call> (gameObject);
+			}
+		}
+
+		public virtual bool DoAppear ()
 		{
 //			if (appeared) {
 //				return false;
@@ -24,15 +36,15 @@ namespace Absir
 
 			if (child == null) {
 				//appeared = true;
-				viewDidAppear ();
+				ViewDidAppear ();
 				return true;
 			}
 				
-			child.doAppear ();
+			child.DoAppear ();
 			return false;
 		}
 
-		public virtual bool doDisappear ()
+		public virtual bool DoDisappear ()
 		{
 //			if (!appeared) {
 //				return false;
@@ -40,75 +52,75 @@ namespace Absir
 
 			if (child == null) {
 				//appeared = false;
-				viewDidDisappear ();
+				ViewDidDisappear ();
 				return true;
 			}
 		
-			child.doDisappear ();
+			child.DoDisappear ();
 			return false;
 		}
 
-		protected virtual void viewDidAppear ()
+		protected virtual void ViewDidAppear ()
 		{
-		
+			AB_Call.DoCall (call, _ViewDidAppear);
 		}
 
-		protected virtual void viewDidDisappear ()
+		protected virtual void ViewDidDisappear ()
 		{
-		
+			AB_Call.DoCall (call, _ViewDidDisappear);
 		}
 
-		public AB_Viewor getParent ()
+		public AB_Viewor GetParent ()
 		{
 			return parent;
 		}
 
-		public void presentViewor (AB_Viewor viewor)
+		public void PresentViewor (AB_Viewor viewor)
 		{
 			child = viewor;
 			viewor.parent = this;
 
 			Transform container = gameObject.transform.parent;
-			GameObjectUtils.getOrAddComponent<AB_Retain> (gameObject).retain ();
+			GameObjectUtils.GetOrAddComponent<AB_Retain> (gameObject).Retain ();
 
-			doDisappearTransform ();
-			viewor.doAppearTransform (container);
+			DoDisappearTransform ();
+			viewor.DoAppearTransform (container);
 		}
 
-		public void presentGameObject (GameObject go)
+		public void PresentGameObject (GameObject go)
 		{
-			presentViewor (GameObjectUtils.getOrAddComponent<AB_Viewor> (go));
+			PresentViewor (GameObjectUtils.GetOrAddComponent<AB_Viewor> (go));
 		}
 
-		public AB_Viewor dismissViewor ()
+		public AB_Viewor DismissViewor ()
 		{
 			if (parent != null) {
 				Transform container = gameObject.transform.parent;
-				doDisappearTransform ();
+				DoDisappearTransform ();
 
-				GameObjectUtils.getOrAddComponent<AB_Retain> (parent.gameObject).release ();
+				GameObjectUtils.GetOrAddComponent<AB_Retain> (parent.gameObject).Release ();
 
 				AB_Viewor viewor = parent;
 				parent.child = null;
 				parent = null;
 
-				viewor.doAppearTransform (container);
+				viewor.DoAppearTransform (container);
 				return viewor;
 			}
 
 			return null;
 		}
 
-		public void doAppearTransform (Transform containerTrans)
+		public void DoAppearTransform (Transform containerTrans)
 		{
-			AB_UI.ME.addViewAuto (transform, containerTrans, true);
-			doAppear ();
+			AB_UI.ME.AddViewAuto (transform, containerTrans, true);
+			DoAppear ();
 		}
 
-		public bool doDisappearTransform ()
+		public virtual bool DoDisappearTransform ()
 		{
-			bool destory = AB_UI.ME.removeView (transform);
-			doDisappear ();
+			bool destory = AB_UI.ME.RemoveView (transform);
+			DoDisappear ();
 			return destory;
 		}
 
@@ -128,35 +140,35 @@ namespace Absir
 			}
 		}
 
-		public static void doAppearGameObject (GameObject gameObject, Transform containerTrans)
+		public static void DoAppearGameObject (GameObject gameObject, Transform containerTrans)
 		{
-			GameObjectUtils.getOrAddComponent<AB_Viewor> (gameObject).doAppearTransform (containerTrans);
+			GameObjectUtils.GetOrAddComponent<AB_Viewor> (gameObject).DoAppearTransform (containerTrans);
 		}
 
 		private static List<AB_Viewor> currentViewors = new List<AB_Viewor> ();
 
-		public static int getCurrentVieworCount ()
+		public static int GetCurrentVieworCount ()
 		{
 			return currentViewors.Count;
 		}
 
-		public static AB_Viewor getCurrentViewor (int index)
+		public static AB_Viewor GetCurrentVieworAt (int index)
 		{
 			return index < 0 || index >= currentViewors.Count ? null : currentViewors [index];
 		}
 
-		public static AB_Viewor getCurrentViewor ()
+		public static AB_Viewor GetCurrentViewor ()
 		{
 			int count = currentViewors.Count;
 			return count > 0 ? currentViewors [count - 1] : null;
 		}
 
-		public static T getCurrentVieworOrder<T> (int order) where T : AB_Viewor
+		public static T GetCurrentVieworOrder<T> (int order) where T : AB_Viewor
 		{
 			int count = currentViewors.Count;
 			for (count--; count >= 0; count--) {
 				AB_Viewor viewor = currentViewors [count];
-				if (viewor is Time && order-- <= 0) {
+				if (viewor is T && order-- <= 0) {
 					return (T)viewor;
 				}
 			}
@@ -164,38 +176,38 @@ namespace Absir
 			return null;
 		}
 
-		public static AB_Viewor getRootViewor ()
+		public static AB_Viewor GetRootViewor ()
 		{
 			int count = currentViewors.Count;
 			return count > 0 ? currentViewors [0] : null;
 		}
 
-		public static void clearViewor (AB_Viewor viewor)
+		public static void ClearViewor (AB_Viewor viewor)
 		{
 			if (viewor != null) {
-				clearViewor (viewor.child);
-				viewor.doDisappearTransform ();
+				ClearViewor (viewor.child);
+				viewor.DoDisappearTransform ();
 			}
 		}
 
-		public static void setRootViewor (AB_Viewor viewor)
+		public static void SetRootViewor (AB_Viewor viewor)
 		{
-			AB_Viewor rootViewor = getRootViewor ();
+			AB_Viewor rootViewor = GetRootViewor ();
 			Transform rootContainer;
 			if (rootViewor == null) {
 				rootContainer = AB_Screen.ME.getContainer ();
-				clearViewor (rootViewor);
+				ClearViewor (rootViewor);
 			
 			} else {
-				rootContainer = rootViewor.parent;
+				rootContainer = rootViewor.transform.parent;
 			}
 
-			viewor.doAppearTransform (rootContainer);
+			viewor.DoAppearTransform (rootContainer);
 		}
 
-		public static void setRootGameObject (GameObject go)
+		public static void SetRootGameObject (GameObject go)
 		{
-			setRootViewor (GameObjectUtils.getOrAddComponent<AB_Viewor> (go));
+			SetRootViewor (GameObjectUtils.GetOrAddComponent<AB_Viewor> (go));
 		}
 	}
 }

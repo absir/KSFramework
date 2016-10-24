@@ -8,7 +8,7 @@ namespace Absir
 	[SLua.GenLuaName]
 	public class LangUtils
 	{
-		public static int parseInt (string str)
+		public static int ParseInt (string str)
 		{
 			if (str == null) {
 				return 0;
@@ -19,7 +19,7 @@ namespace Absir
 			return i;
 		}
 
-		public static float parseFloat (string str)
+		public static float ParseFloat (string str)
 		{
 			if (str == null) {
 				return 0;

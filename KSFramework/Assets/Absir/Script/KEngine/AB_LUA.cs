@@ -8,8 +8,8 @@ namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
 	[SLua.GenLuaName]
-	//[RequireComponent (typeof(UILuaOutlet))]
-	public class AB_LUA : MonoBehaviour
+
+	public class AB_LUA : AB_Call
 	{
 		public static bool OnDestoryReload;
 
@@ -21,28 +21,33 @@ namespace Absir
 
 		private LuaFunction _luaLastUpdateFunction;
 
+		override public object Call (string call, params object[] args)
+		{
+			return LuaTableCall (_luaTable, call, args);
+		}
+
 		public LuaTable LuaTable ()
 		{
 			return _luaTable;
 		}
 
-		public object LuaCall (string call, params object[] args)
+		protected void Awake ()
 		{
-			return LuaTableCall (_luaTable, call, args);
+			AB_Game.AddLogicStartActions (AwakeLua);
 		}
 
-		public void Awake ()
+		protected void AwakeLua ()
 		{
-			LoadLuaBehaviour (lua, out _luaTable, true, this);
+			LoadLuaTable (lua, out _luaTable, true, this);
 			if (_luaTable != null) {
-				LuaCall ("Awake");
+				Call ("Awake");
 			}
 		}
 
 		protected void Start ()
 		{
 			if (_luaTable != null) {
-				LuaCall ("Start");
+				Call ("Start");
 				_luaUpdateFunction = (LuaFunction)_luaTable ["Update"];
 				_luaLastUpdateFunction = (LuaFunction)_luaTable ["LateUpdate"];
 			}
@@ -62,39 +67,39 @@ namespace Absir
 			}
 		}
 
-		public void OnEnable ()
+		protected void OnEnable ()
 		{
-			LuaCall ("OnEnable");
+			Call ("OnEnable");
 		}
 
-		public void OnDisable ()
+		protected void OnDisable ()
 		{
-			LuaCall ("OnDisable");
+			Call ("OnDisable");
 		}
 
-		public void OnDestory ()
+		protected void OnDestory ()
 		{
-			LuaCall ("OnDestory");
+			Call ("OnDestory");
 			#if UNITY_EDITOR
 			if (!string.IsNullOrEmpty (lua) && OnDestoryReload) {
-				ReloadLuaBehaviour (lua);
+				ClearLuaCache (lua);
 			}
 			#endif
 		}
 
-		public static string LuaBehaviourPath (string lua)
+		public static string LuaRelPath (string lua)
 		{
-			return lua.Contains ("/") ? lua : ("Behaviour/" + lua);
+			return lua;
 		}
 
-		public static bool LoadLuaBehaviour (string lua, out LuaTable luaTable, bool showWarn, Component component)
+		public static bool LoadLuaTable (string lua, out LuaTable luaTable, bool showWarn, Component component)
 		{
 			luaTable = null;
 			if (string.IsNullOrEmpty (lua)) {
 				return false;
 			}
 
-			var relPath = LuaBehaviourPath (lua);
+			var relPath = LuaRelPath (lua);
 			var luaModule = KSGame.Instance.LuaModule;
 			object scriptResult;
 			if (!luaModule.TryImport (relPath, out scriptResult)) {
@@ -114,7 +119,7 @@ namespace Absir
 				luaTable = newTableObj as LuaTable;
 			}
 
-			var outlet = component.GetComponent<UILuaOutlet> ();
+			var outlet = component == null ? null : component.GetComponent<UILuaOutlet> ();
 			if (outlet != null) {
 				for (var i = 0; i < outlet.OutletInfos.Count; i++) {
 					var outletInfo = outlet.OutletInfos [i];
@@ -139,7 +144,7 @@ namespace Absir
 			return true;
 		}
 
-		public object LuaTableCall (LuaTable luaTable, string call, params object[] args)
+		public static object LuaTableCall (LuaTable luaTable, string call, params object[] args)
 		{
 			if (luaTable != null) {
 				var luaCallObj = luaTable [call];
@@ -151,9 +156,9 @@ namespace Absir
 			return null;
 		}
 
-		public static void ReloadLuaBehaviour (string lua)
+		public static void ClearLuaCache (string lua)
 		{
-			var relPath = LuaBehaviourPath (lua);
+			var relPath = LuaRelPath (lua);
 			var luaModule = KSFramework.KSGame.Instance.LuaModule;
 			luaModule.ClearCache (relPath);
 			Brige.ME.LogWarn ("Reload Lua: " + relPath);

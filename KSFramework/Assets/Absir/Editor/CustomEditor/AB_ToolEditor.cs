@@ -91,7 +91,7 @@ namespace Absir
 			Debug.Log (tool + " Do Trigger Start");
 			try {
 				tool.Intecepted = false;
-				yield return tool.doTrigger ();
+				yield return tool.DoTrigger ();
 
 			} finally {
 				Debug.Log (tool + " Do Trigger Complete");

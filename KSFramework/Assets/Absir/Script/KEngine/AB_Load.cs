@@ -73,7 +73,6 @@ namespace Absir
 				Debug.Log ("AB_Load unload " + loadedName);
 				SceneManager.UnloadScene (activeScene);
 				//Application.UnloadLevel (loadedName);
-				AB_Game.LogicComplete ("AB_Load");
 			};
 
 			int sceneCount = SceneManager.sceneCount;
@@ -82,6 +81,7 @@ namespace Absir
 					SceneManager.SetActiveScene (SceneManager.GetSceneAt (sceneCount));
 				}
 
+				AB_Game.LogicComplete ("AB_Load");
 				if (!unloadWaite) {
 					UnloadAction ();
 				}
@@ -116,7 +116,7 @@ namespace Absir
 		{
 			yield return 0;
 			//Debug.Log ("UnloadActionDelay " + unloadDelay);
-			while (unloadDelay > 0) {
+			while (unloadDelay > 0 || !AB_Game.IsonLogicStarted ()) {
 				yield return 0;
 			}
 

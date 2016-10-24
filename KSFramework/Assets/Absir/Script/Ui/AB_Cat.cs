@@ -6,9 +6,9 @@ namespace Absir
 {
 	public interface CatTrigger
 	{
-		object getTrigger ();
+		object GetTrigger ();
 
-		void run ();
+		void Run ();
 	}
 
 	public abstract class CatTriggerTarget<T> : CatTrigger
@@ -20,12 +20,12 @@ namespace Absir
 			this.target = target;
 		}
 
-		public object getTrigger ()
+		public object GetTrigger ()
 		{
 			return target;
 		}
 
-		abstract public void run ();
+		abstract public void Run ();
 	}
 
 	public class CatTriggerAction : CatTrigger
@@ -37,12 +37,12 @@ namespace Absir
 			this.action = action;
 		}
 
-		public object getTrigger ()
+		public object GetTrigger ()
 		{
 			return action;
 		}
 
-		public void run ()
+		public void Run ()
 		{
 			action ();
 		}
@@ -53,15 +53,15 @@ namespace Absir
 	{
 		protected List<CatTrigger> catTriggers = new List<CatTrigger> (1);
 
-		public void addCatTrigger (CatTrigger catTrigger)
+		public void AddCatTrigger (CatTrigger catTrigger)
 		{
 			catTriggers.Add (catTrigger);
 		}
 
-		public CatTrigger getCatTrigger (object trigger)
+		public CatTrigger GetCatTrigger (object trigger)
 		{
 			foreach (var catTrigger in catTriggers) {
-				if (catTrigger.getTrigger () == trigger) {
+				if (catTrigger.GetTrigger () == trigger) {
 					return catTrigger;
 				}
 			}
@@ -69,22 +69,22 @@ namespace Absir
 			return null;
 		}
 
-		public void removeCatTrigger (object trigger)
+		public void RemoveCatTrigger (object trigger)
 		{
 			int count = catTriggers.Count;
 			for (int i = 0; i < count; i++) {
-				if (catTriggers [i].getTrigger () == trigger) {
+				if (catTriggers [i].GetTrigger () == trigger) {
 					catTriggers.RemoveAt (i);
 					break;
 				}
 			}
 		}
 
-		public void clearCatTrigger (object trigger)
+		public void ClearCatTrigger (object trigger)
 		{
 			int count = catTriggers.Count;
 			for (int i = 0; i < count; i++) {
-				if (trigger == null || catTriggers [i].getTrigger () == trigger) {
+				if (trigger == null || catTriggers [i].GetTrigger () == trigger) {
 					catTriggers.RemoveAt (i);
 					i--;
 					count--;
@@ -101,12 +101,12 @@ namespace Absir
 		{
 			foreach (CatTrigger catTrigger in catTriggers) {
 				if (trigger == null) {
-					catTrigger.run ();
+					catTrigger.Run ();
 				
 				} else {
-					object t = catTrigger.getTrigger ();
+					object t = catTrigger.GetTrigger ();
 					if (t == null || t == trigger) {
-						catTrigger.run ();
+						catTrigger.Run ();
 					}
 				}
 			}

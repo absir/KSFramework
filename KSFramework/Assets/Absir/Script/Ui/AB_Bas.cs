@@ -7,10 +7,10 @@ namespace Absir
 	{
 		protected void Start ()
 		{
-			initComponent ();
+			InitComponent ();
 		}
 
-		virtual protected void initComponent ()
+		virtual protected void InitComponent ()
 		{
 		}
 	}

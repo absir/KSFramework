@@ -12,6 +12,12 @@ namespace Absir
 	{
 		public static AB_Screen ME {
 			get {
+				if (_ME == null) {
+					GameObject screen = new GameObject ();
+					screen.name = "AB_Screen";
+					_ME = screen.AddComponent<AB_Screen> ();
+				}
+
 				return _ME;
 			}
 		}
@@ -57,9 +63,9 @@ namespace Absir
 		public void CalcScreen ()
 		{
 			if (uiCamera == null) {
-				uiCamera = ComponentUtils.fetchParentComponent<Camera> (gameObject);
+				uiCamera = ComponentUtils.FetchParentComponent<Camera> (gameObject);
 				if (uiCamera == null) {
-					uiCamera = ComponentUtils.fetchAllChildrenComponent<Camera> (gameObject);
+					uiCamera = ComponentUtils.FetchAllChildrenComponent<Camera> (gameObject);
 					if (uiCamera == null) {
 						uiCamera = Camera.main;
 						if (uiCamera == null) {
@@ -73,7 +79,7 @@ namespace Absir
 			}
 
 			if (canvasScaler == null) {
-				canvasScaler = GameObjectUtils.getOrAddComponent<CanvasScaler> (gameObject);
+				canvasScaler = GameObjectUtils.GetOrAddComponent<CanvasScaler> (gameObject);
 			}
 
 			canvas = canvasScaler.GetComponent<Canvas> ();
@@ -111,8 +117,8 @@ namespace Absir
 
 			CalcContainer (container);
 
-			scaleOffset = calcScreenRationScaleOffset (size, style);
-			Debug.Log ("scaleOffset = " + TransformUtils.getVector2String (scaleOffset));
+			scaleOffset = CalcScreenRationScaleOffset (size, style);
+			Debug.Log ("scaleOffset = " + TransformUtils.GetVector2String (scaleOffset));
 		}
 
 		protected RectTransform InitContainer ()
@@ -143,7 +149,7 @@ namespace Absir
 		public static float ScaleOffsetX;
 		public static float ScaleOffsetY;
 
-		protected Vector2 calcScreenRationScaleOffset (Vector2 size, CanvasScaler.ScreenMatchMode style)
+		protected Vector2 CalcScreenRationScaleOffset (Vector2 size, CanvasScaler.ScreenMatchMode style)
 		{
 			if (size.x == Screen.width && size.y == Screen.height) {
 				return Vector2.zero;

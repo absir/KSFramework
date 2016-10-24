@@ -6,7 +6,7 @@ namespace Absir
 {
 	public class ComponentUtils
 	{
-		public static void addComponentSort<T> (List<T> componentSort, T component) where T : Component
+		public static void AddComponentSort<T> (List<T> componentSort, T component) where T : Component
 		{
 			string name = component.gameObject.name;
 			int count = componentSort.Count;
@@ -20,17 +20,17 @@ namespace Absir
 			componentSort.Add (component);
 		}
 
-		public static List<T> getComponentSort<T> (List<T> componentList) where T : Component
+		public static List<T> GetComponentSort<T> (List<T> componentList) where T : Component
 		{
 			List<T> componentSort = new List<T> (componentList.Count);
 			foreach (T component in componentList) {
-				addComponentSort (componentSort, component);
+				AddComponentSort (componentSort, component);
 			}
 		
 			return componentSort;
 		}
 
-		public static List<T> getChildrenComponentList<T> (GameObject gameObject) where T : Component
+		public static List<T> GetChildrenComponentList<T> (GameObject gameObject) where T : Component
 		{
 			List<T> componentList = new List<T> ();
 			Transform transform = gameObject.transform;
@@ -44,7 +44,7 @@ namespace Absir
 			return componentList;
 		}
 
-		public static T getComponentObject<T> (GameObject gameObject) where T : Object
+		public static T GetComponentObject<T> (GameObject gameObject) where T : Object
 		{
 			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
@@ -55,7 +55,7 @@ namespace Absir
 			return null;
 		}
 
-		public static List<T> getComponentObjects<T> (GameObject gameObject) where T : Object
+		public static List<T> GetComponentObjects<T> (GameObject gameObject) where T : Object
 		{
 			List<T> componentList = new List<T> ();
 			foreach (Component component in gameObject.GetComponents<Component>()) {
@@ -67,32 +67,32 @@ namespace Absir
 			return componentList;
 		}
 
-		public static List<T> getComponentObjectSort<T> (GameObject gameObject) where T : Component
+		public static List<T> GetComponentObjectSort<T> (GameObject gameObject) where T : Component
 		{
 			List<T> componentSort = new List<T> ();
 			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
-					addComponentSort<T> (componentSort, (T)component);
+					AddComponentSort<T> (componentSort, (T)component);
 				}
 			}
 		
 			return componentSort;
 		}
 
-		public static List<T> getChildrenComponentSort<T> (GameObject gameObject) where T : Component
+		public static List<T> GetChildrenComponentSort<T> (GameObject gameObject) where T : Component
 		{
 			List<T> componentSort = new List<T> ();
 			foreach (Transform child in gameObject.transform) {
 				T component = child.gameObject.GetComponent<T> ();
 				if (component != null) {
-					addComponentSort (componentSort, component);
+					AddComponentSort (componentSort, component);
 				}
 			}
 		
 			return componentSort;
 		}
 
-		public static T fetchParentComponent<T> (GameObject gameObject) where T : Component
+		public static T FetchParentComponent<T> (GameObject gameObject) where T : Component
 		{
 			T component;
 			while ((component = gameObject.GetComponent<T> ()) == null) {
@@ -107,12 +107,12 @@ namespace Absir
 			return component;
 		}
 
-		public static T fetchChildrenComponent<T> (GameObject gameObject) where T : Component
+		public static T FetchChildrenComponent<T> (GameObject gameObject) where T : Component
 		{
-			return fetchChildrenComponent<T> (gameObject, 0);
+			return FetchChildrenComponent<T> (gameObject, 0);
 		}
 
-		public static T fetchChildrenComponent<T> (GameObject gameObject, int componentIndex) where T : Component
+		public static T FetchChildrenComponent<T> (GameObject gameObject, int componentIndex) where T : Component
 		{
 			foreach (Transform child in gameObject.transform) {
 				T component = child.gameObject.GetComponent<T> ();
@@ -124,7 +124,7 @@ namespace Absir
 			return null;
 		}
 
-		public static T fetchAllChildrenComponent<T> (GameObject gameObject) where T : Component
+		public static T FetchAllChildrenComponent<T> (GameObject gameObject) where T : Component
 		{
 			T component = gameObject.GetComponent<T> ();
 			if (component != null) {
@@ -132,7 +132,7 @@ namespace Absir
 			}
 		
 			foreach (Transform child in gameObject.transform) {
-				component = fetchAllChildrenComponent<T> (child.gameObject);
+				component = FetchAllChildrenComponent<T> (child.gameObject);
 				if (component != null) {
 					return component;
 				} 
@@ -154,7 +154,7 @@ namespace Absir
 				transform = transform.parent;
 			}
 		
-			return fetchAllChildrenComponent<T> (gameObject);
+			return FetchAllChildrenComponent<T> (gameObject);
 		}
 	}
 }

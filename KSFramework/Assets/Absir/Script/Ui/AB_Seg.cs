@@ -12,27 +12,27 @@ namespace Absir
 
 		public Action<int> componentIndexAction;
 
-		public int getActiveComponentIndex ()
+		public int GetActiveComponentIndex ()
 		{
 			return activeComponentIndex;
 		}
 
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
-			base.initComponent ();
+			base.InitComponent ();
 			if (activeComponent != null) {
 				activeComponentIndex = componentSort.IndexOf (activeComponent);
 			}
 		}
 
-		protected override void bindCat (AB_Cat cat, Button component)
+		protected override void BindCat (AB_Cat cat, Button component)
 		{
 			component.onClick.AddListener (cat.OnClick);
 		}
 
-		override public bool setActiveComponentIndex (int componentIndex)
+		override public bool SetActiveComponentIndex (int componentIndex)
 		{
-			if (base.setActiveComponentIndex (componentIndex)) {
+			if (base.SetActiveComponentIndex (componentIndex)) {
 				activeComponentIndex = componentIndex;
 				if (componentIndexAction != null) {
 					componentIndexAction (componentIndex);
@@ -44,12 +44,12 @@ namespace Absir
 			return false;
 		}
 
-		override protected bool isComponentActive (Button component)
+		override protected bool IsComponentActive (Button component)
 		{
 			return !component.interactable;
 		}
 
-		override protected void setComponentActive (Button component, bool active)
+		override protected void SetComponentActive (Button component, bool active)
 		{
 			if (active) {
 				//component.gameObject.SendMessage ("OnPress", true);

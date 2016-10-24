@@ -6,13 +6,13 @@ namespace Absir
 {
 	public abstract class CanComponent : AB_Bas
 	{
-		abstract public int getComponentCount ();
+		abstract public int GetComponentCount ();
 
-		abstract public Component getComponentAt (int index);
+		abstract public Component GetComponentAt (int index);
 
-		abstract public Component getActiveComponent ();
+		abstract public Component GetActiveComponent ();
 
-		abstract public bool setActiveComponentIndex (int componentIndex);
+		abstract public bool SetActiveComponentIndex (int componentIndex);
 	}
 
 	public abstract class AB_Can<T> : CanComponent where T : Component
@@ -23,21 +23,21 @@ namespace Absir
 
 		protected T activeComponent;
 
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
 			if (targetChildren == null) {
 				targetChildren = gameObject;
 			}
 		
-			componentSort = getComponentSort ();
+			componentSort = GetComponentSort ();
 			foreach (T component in componentSort) {
-				initComponent (component);
-				if (isComponentActive (component)) {
+				InitComponent (component);
+				if (IsComponentActive (component)) {
 					if (activeComponent == null) {
 						activeComponent = component;
 					
 					} else {
-						setComponentActive (component, false);
+						SetComponentActive (component, false);
 					}
 				}
 			}
@@ -47,55 +47,55 @@ namespace Absir
 			}
 		}
 
-		virtual public void addCanComponent (T component)
+		virtual public void AddCanComponent (T component)
 		{
-			AB_UI.ME.addView (component.transform, targetChildren.transform);
+			AB_UI.ME.AddView (component.transform, targetChildren.transform);
 			componentSort.Add (component);
-			setComponentActive (component, false);
+			SetComponentActive (component, false);
 		}
 
-		virtual public T removeCanComponentIndex (int index)
+		virtual public T RemoveCanComponentIndex (int index)
 		{
 			if (index >= 0 && index < componentSort.Count) {
 				T component = componentSort [index];
 				if (component == activeComponent) {
-					setActiveComponentIndex (0);
+					SetActiveComponentIndex (0);
 				}
 
 				componentSort.RemoveAt (index);
-				AB_UI.ME.removeView (component.transform);
+				AB_UI.ME.RemoveView (component.transform);
 				return component;
 			}
 
 			return null;
 		}
 
-		virtual protected void initComponent (T component)
+		virtual protected void InitComponent (T component)
 		{
 		}
 
-		virtual protected List<T> getComponentSort ()
+		virtual protected List<T> GetComponentSort ()
 		{
-			return ComponentUtils.getChildrenComponentSort<T> (targetChildren);
+			return ComponentUtils.GetChildrenComponentSort<T> (targetChildren);
 		}
 
-		override public int getComponentCount ()
+		override public int GetComponentCount ()
 		{
 			return componentSort.Count;
 		}
 
-		override public Component getComponentAt (int index)
+		override public Component GetComponentAt (int index)
 		{
 			int count = componentSort.Count;
 			return index < 0 || index >= count ? null : componentSort [index];
 		}
 
-		override public Component getActiveComponent ()
+		override public Component GetActiveComponent ()
 		{
 			return activeComponent;
 		}
 
-		override public bool setActiveComponentIndex (int componentIndex)
+		override public bool SetActiveComponentIndex (int componentIndex)
 		{
 			if (componentSort == null || componentIndex < 0 || componentIndex >= componentSort.Count) {
 				return false;
@@ -111,16 +111,16 @@ namespace Absir
 			}
 		
 			if (activeComponent != null) {
-				setComponentActive (activeComponent, false);
+				SetComponentActive (activeComponent, false);
 			}
 		
-			setComponentActive (component, true);
+			SetComponentActive (component, true);
 			activeComponent = component;
 			return true;
 		}
 
-		abstract protected bool isComponentActive (T component);
+		abstract protected bool IsComponentActive (T component);
 
-		abstract protected void setComponentActive (T component, bool active);
+		abstract protected void SetComponentActive (T component, bool active);
 	}
 }

@@ -6,7 +6,7 @@ namespace Absir
 {
 	public interface ICats
 	{
-		void onTrigger (int componentIndex);
+		void OnTrigger (int componentIndex);
 	}
 
 	public class CatsTrigger : CatTriggerTarget<ICats>
@@ -18,65 +18,65 @@ namespace Absir
 			this.componentIndex = componentIndex;
 		}
 
-		override public void run ()
+		override public void Run ()
 		{
-			target.onTrigger (componentIndex);
+			target.OnTrigger (componentIndex);
 		}
 	}
 
 	public abstract class AB_Cats<T> : AB_Can<T>, ICats where T : Component
 	{
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
-			base.initComponent ();
+			base.InitComponent ();
 			int count = componentSort.Count;
 			for (int i = 0; i < count; i++) {
 				T component = componentSort [i];
-				addCatInvoker (component, i);
+				AddCatInvoker (component, i);
 			}
 		}
 
-		protected void addCatInvoker (T component, int index)
+		protected void AddCatInvoker (T component, int index)
 		{
-			AB_Cat cat = GameObjectUtils.getOrAddComponent<AB_Cat> (component.gameObject);
-			cat.addCatTrigger (new CatsTrigger (this, index));
-			bindCat (cat, component);
+			AB_Cat cat = GameObjectUtils.GetOrAddComponent<AB_Cat> (component.gameObject);
+			cat.AddCatTrigger (new CatsTrigger (this, index));
+			BindCat (cat, component);
 		}
 
-		protected virtual void bindCat (AB_Cat cat, T component)
+		protected virtual void BindCat (AB_Cat cat, T component)
 		{
 		}
 
-		protected void setCatInvoker (T component, int index)
+		protected void SetCatInvoker (T component, int index)
 		{
-			AB_Cat cat = GameObjectUtils.getOrAddComponent<AB_Cat> (component.gameObject);
-			CatsTrigger trigger = cat.getCatTrigger (this) as CatsTrigger;
+			AB_Cat cat = GameObjectUtils.GetOrAddComponent<AB_Cat> (component.gameObject);
+			CatsTrigger trigger = cat.GetCatTrigger (this) as CatsTrigger;
 			if (trigger == null) {
-				cat.addCatTrigger (new CatsTrigger (this, index));
+				cat.AddCatTrigger (new CatsTrigger (this, index));
 			
 			} else {
 				trigger.componentIndex = index;
 			}
 		}
 
-		virtual public void onTrigger (int componentIndex)
+		virtual public void OnTrigger (int componentIndex)
 		{
-			setActiveComponentIndex (componentIndex);
+			SetActiveComponentIndex (componentIndex);
 		}
 
-		override public void addCanComponent (T component)
+		override public void AddCanComponent (T component)
 		{
-			base.addCanComponent (component);
-			addCatInvoker (component, componentSort.Count - 1);
+			base.AddCanComponent (component);
+			AddCatInvoker (component, componentSort.Count - 1);
 		}
 
-		override public T removeCanComponentIndex (int index)
+		override public T RemoveCanComponentIndex (int index)
 		{
-			T component = base.removeCanComponentIndex (index);
+			T component = base.RemoveCanComponentIndex (index);
 			if (component != null) {
 				int count = componentSort.Count;
 				for (int i = index; i < count; i++) {
-					setCatInvoker (componentSort [i], i);
+					SetCatInvoker (componentSort [i], i);
 				}
 			}
 

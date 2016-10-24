@@ -8,7 +8,7 @@ namespace Absir
 		public void ReloadLua ()
 		{
 			foreach (AB_LUA lua in GameObject.FindObjectsOfType<AB_LUA> ()) {
-				AB_LUA.ReloadLuaBehaviour (lua.lua);
+				AB_LUA.ClearLuaCache (lua.lua);
 			}
 
 			Debug.Log ("AB_Brige.ReloadLua");

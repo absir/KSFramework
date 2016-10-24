@@ -6,7 +6,7 @@ namespace Absir
 {
 	public class AB_Nav : MonoBehaviour
 	{
-		public virtual void display (List<AB_Viewor> viewors)
+		public virtual void Display (List<AB_Viewor> viewors)
 		{
 		
 		}

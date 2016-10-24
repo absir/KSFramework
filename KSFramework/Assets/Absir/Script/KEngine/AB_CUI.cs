@@ -70,14 +70,14 @@ namespace Absir
 		public static void CallDialogWindow (string uiName)
 		{
 			KEngine.UI.UIModule.Instance.CallDynamicUI (uiName, (controller, args) => {
-				AB_UI.ME.openDialog (controller.gameObject);
+				AB_UI.ME.OpenDialog (controller.gameObject);
 			});
 		}
 
 		public static void CallDialogWindow (string uiName, string name)
 		{
 			KEngine.UI.UIModule.Instance.CallDynamicUI (uiName, (controller, args) => {
-				AB_UI.ME.openDialogName (controller.gameObject, name);
+				AB_UI.ME.OpenDialogName (controller.gameObject, name);
 			});
 		}
 	}

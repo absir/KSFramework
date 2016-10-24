@@ -18,12 +18,12 @@ namespace Absir
 
 		private static List<Action> onLogicStartActions = new List<Action> ();
 
-		public static void RunActions (List<Action> actions, Action complete)
+		public static void RunActions (List<Action> actions, Action emptyCallback)
 		{
-			KResourceModule.Instance.StartCoroutine (RunActionsEnumerator (actions, complete));
+			KResourceModule.Instance.StartCoroutine (RunActionsEnumerator (actions, emptyCallback));
 		}
 
-		public static IEnumerator RunActionsEnumerator (List<Action> actions, Action complete)
+		public static IEnumerator RunActionsEnumerator (List<Action> actions, Action emptyCallback)
 		{
 			while (true) {
 				int count = actions.Count;
@@ -31,7 +31,8 @@ namespace Absir
 					break;
 				}
 
-				for (int i = 0; i < count; i++) {
+				int last = count - 1;
+				for (int i = 0; i < last; i++) {
 					try {
 						actions [i] ();
 
@@ -40,12 +41,24 @@ namespace Absir
 					}
 				}
 
+				Action lastAction = actions [last];
 				actions.RemoveRange (0, count);
+				if (emptyCallback != null && actions.Count <= 0) {
+					emptyCallback ();
+				}
+
+				try {
+					lastAction ();
+
+				} catch (System.Exception e) {
+					Log.Error ("RunAction Exception " + e);
+				}
+					
 				yield return 0;
 			}
 
-			if (complete != null) {
-				complete ();
+			if (emptyCallback != null) {
+				emptyCallback ();
 			}
 		}
 
@@ -75,6 +88,7 @@ namespace Absir
 
 		public static void AddLogicStartActions (Action action)
 		{
+			//Debug.Log ("AddLogicStartActions " + action);
 			if (action != null) {
 				if (onLogicStartActions == null) {
 					action ();
@@ -107,6 +121,11 @@ namespace Absir
 					});
 				}
 			}
+		}
+
+		public static bool IsonLogicStarted ()
+		{
+			return onLogicStartActions == null;
 		}
 
 		protected override void Awake ()

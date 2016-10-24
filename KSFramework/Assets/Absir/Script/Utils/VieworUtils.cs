@@ -4,23 +4,16 @@ using System.Collections.Generic;
 
 namespace Absir
 {
-	[SLua.CustomLuaClassAttribute]
-	[SLua.GenLuaName]
 	public class VieworUtils
 	{
-		public static AB_Viewor getViewor (GameObject gameObject)
-		{
-			return ComponentUtils.fetchCurrentComponent<AB_Viewor> (gameObject);
-		}
-
 		public static AB_mNavViewor getNavViewor (GameObject gameObject)
 		{
-			return ComponentUtils.fetchCurrentComponent<AB_mNavViewor> (gameObject);
+			return AB_Viewor.GetCurrentVieworOrder<AB_mNavViewor> (0);
 		}
 
 		public static AB_mTabViewor getTabViewor (GameObject gameObject)
 		{
-			return ComponentUtils.fetchCurrentComponent<AB_mTabViewor> (gameObject);
+			return AB_Viewor.GetCurrentVieworOrder<AB_mTabViewor> (0);
 		}
 	}
 }

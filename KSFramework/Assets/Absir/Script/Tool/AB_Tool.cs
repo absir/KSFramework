@@ -10,7 +10,7 @@ namespace Absir
 		[HideInInspector]
 		public bool Intecepted;
 
-		public abstract IEnumerator doTrigger ();
+		public abstract IEnumerator DoTrigger ();
 
 	}
 	#endif

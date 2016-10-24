@@ -9,26 +9,26 @@ namespace Absir
 	{
 		public CanComponent canComponent;
 
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
-			base.initComponent ();
-			setTabComponentIndex ();
+			base.InitComponent ();
+			SetTabComponentIndex ();
 		}
 
-		override public bool setActiveComponentIndex (int componentIndex)
+		override public bool SetActiveComponentIndex (int componentIndex)
 		{
-			if (base.setActiveComponentIndex (componentIndex)) {
-				setTabComponentIndex ();
+			if (base.SetActiveComponentIndex (componentIndex)) {
+				SetTabComponentIndex ();
 				return true;
 			}
 		
 			return false;
 		}
 
-		virtual protected void setTabComponentIndex ()
+		virtual protected void SetTabComponentIndex ()
 		{
 			if (canComponent != null) {
-				canComponent.setActiveComponentIndex (activeComponentIndex);
+				canComponent.SetActiveComponentIndex (activeComponentIndex);
 			}
 		}
 	}

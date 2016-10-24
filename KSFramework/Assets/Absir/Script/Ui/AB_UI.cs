@@ -46,16 +46,16 @@ namespace Absir
 			foreach (var retain in GameObject.FindObjectsOfType<AB_Retain> ()) {
 				if (retain.name.StartsWith ("_")) {
 					GameObject.DontDestroyOnLoad (retain.gameObject);
-					retain.retain ();
+					retain.Retain ();
 					_nameDictRetain.Add (retain.name, retain);
-					addView (retain.transform, _unactiveGameObject.transform);
+					AddView (retain.transform, _unactiveGameObject.transform);
 				}
 			}
 				
 			_dialogObjectStack = new Stack<GameObject> ();
 		}
 
-		public GameObject getRetain (string name)
+		public GameObject GetRetain (string name)
 		{
 			AB_Retain retain = null;
 			_nameDictRetain.TryGetValue (name, out retain);
@@ -68,40 +68,40 @@ namespace Absir
 				return gameObject;
 			}
 
-			retain.release ();
+			retain.Release ();
 			_nameDictRetain.Remove (name);
 			return null;
 		}
 
-		public void putRetain (string name, AB_Retain retain)
+		public void PutRetain (string name, AB_Retain retain)
 		{
-			retain.retain ();
-			removeRetain (name);
+			retain.Retain ();
+			RemoveRetain (name);
 			_nameDictRetain.Add (name, retain);
-			addView (retain.transform, _unactiveGameObject.transform);
+			AddView (retain.transform, _unactiveGameObject.transform);
 		}
 
-		public void removeRetain (string name)
+		public void RemoveRetain (string name)
 		{
 			AB_Retain retain = null;
 			_nameDictRetain.TryGetValue (name, out retain);
 			if (retain != null) {
 				_nameDictRetain.Remove (name);
-				retain.releaseCleanUp ();
+				retain.ReleaseCleanUp ();
 			}
 		}
 
-		public GameObject getUnactiveGameObject ()
+		public GameObject GetUnactiveGameObject ()
 		{
 			return _unactiveGameObject;
 		}
 
-		public void setViewActive (Transform transform, bool status)
+		public void SetViewActive (Transform transform, bool status)
 		{
 			transform.gameObject.SetActive (status);
 		}
 
-		public void addView (Transform viewTrans, Transform containerTrans)
+		public void AddView (Transform viewTrans, Transform containerTrans)
 		{
 			Vector3 localScale = viewTrans.localScale;
 			Vector3 localPosition = viewTrans.localPosition;
@@ -110,70 +110,70 @@ namespace Absir
 			viewTrans.localPosition = localPosition;
 		}
 
-		public void addViewAuto (Transform viewTrans, Transform containerTrans, bool autoHeight)
+		public void AddViewAuto (Transform viewTrans, Transform containerTrans, bool autoHeight)
 		{
-			addView (viewTrans, containerTrans);
+			AddView (viewTrans, containerTrans);
 		}
 
-		public bool removeView (Transform viewTrans)
+		public bool RemoveView (Transform viewTrans)
 		{
 			AB_Retain retain = viewTrans.gameObject.GetComponent<AB_Retain> ();
-			if (retain == null || retain.retainCount <= 0) {
+			if (retain == null || retain.RetainCount <= 0) {
 				GameObject.Destroy (viewTrans.gameObject);
 				return true;
 
 			} else {
-				unActiveView (viewTrans);
+				UnActiveView (viewTrans);
 			}
 
 			return false;
 		}
 
-		public void unActiveView (Transform viewTrans)
+		public void UnActiveView (Transform viewTrans)
 		{
-			addView (viewTrans, _unactiveGameObject.transform);
+			AddView (viewTrans, _unactiveGameObject.transform);
 		}
 
 		private GameObject _dialogBackGround = null;
 
-		public void closeDialogBackGround ()
+		public void CloseDialogBackGround ()
 		{
 			if (_dialogBackGround != null && _dialogBackGround) {
-				removeView (_dialogBackGround.transform);
+				RemoveView (_dialogBackGround.transform);
 			}
 
 			_dialogBackGround = null;
 		}
 
-		public void showDialogBackGround (GameObject dialogBackGround)
+		public void ShowDialogBackGround (GameObject dialogBackGround)
 		{
-			closeDialogBackGround ();
+			CloseDialogBackGround ();
 			if (dialogBackGround != null) {
 				_dialogBackGround = dialogBackGround;
-				addView (_dialogBackGround.transform, AB_Screen.ME.getContainer ());
+				AddView (_dialogBackGround.transform, AB_Screen.ME.getContainer ());
 			}
 		}
 
-		public void showDialogBackGroundName (string name)
+		public void ShowDialogBackGroundName (string name)
 		{
-			showDialogBackGround (getRetain (name));
+			ShowDialogBackGround (GetRetain (name));
 		}
 
-		public void openDialog (GameObject gameObject)
+		public void OpenDialog (GameObject gameObject)
 		{
-			openDialogName (gameObject, null);
+			OpenDialogName (gameObject, null);
 		}
 
-		public void openDialogName (GameObject gameObject, string name)
+		public void OpenDialogName (GameObject gameObject, string name)
 		{
 			if (name == null) {
 				name = "_dialogBackGround";
 			}
 			
-			openDialogWithBackGround (gameObject, _dialogObjectStack.Count == 0 && name.Length != 0 ? getRetain (name) : null);
+			OpenDialogWithBackGround (gameObject, _dialogObjectStack.Count == 0 && name.Length != 0 ? GetRetain (name) : null);
 		}
 
-		public void openDialogWithBackGround (GameObject gameObject, GameObject dialogBackGround)
+		public void OpenDialogWithBackGround (GameObject gameObject, GameObject dialogBackGround)
 		{
 			Vector3 localePosition = gameObject.transform.localPosition;
 			if (_dialogObjectStack.Count == 0) {
@@ -186,7 +186,7 @@ namespace Absir
 				}
 
 				localePosition.z = minZ - BEHIND_STEP_D;
-				showDialogBackGround (dialogBackGround);
+				ShowDialogBackGround (dialogBackGround);
 
 			} else {
 				GameObject dialogObject = _dialogObjectStack.Peek ();
@@ -203,28 +203,28 @@ namespace Absir
 			gameObject.transform.localPosition = localePosition;
 
 			_dialogObjectStack.Push (gameObject);
-			addViewAuto (gameObject.transform, AB_Screen.ME.getContainer (), false);
+			AddViewAuto (gameObject.transform, AB_Screen.ME.getContainer (), false);
 		}
 
-		public GameObject currentDialog ()
+		public GameObject CurrentDialog ()
 		{
 			return _dialogObjectStack.Peek ();
 		}
 
-		public void closeDialog ()
+		public void CloseDialog ()
 		{
 			if (_dialogObjectStack.Count > 0) {
 				GameObject dialogObject = _dialogObjectStack.Pop ();
 				if (dialogObject != null) {
-					removeView (dialogObject.transform);
+					RemoveView (dialogObject.transform);
 					if (_dialogObjectStack.Count == 0) {
-						closeDialogBackGround ();
+						CloseDialogBackGround ();
 					}
 				}
 			}
 		}
 
-		public void closeDialogCount (int cnt)
+		public void CloseDialogCount (int cnt)
 		{
 			int count = _dialogObjectStack.Count;
 			if (count == 0) {
@@ -234,15 +234,15 @@ namespace Absir
 			GameObject dialog;
 			while (count-- > 0 && cnt-- > 0) {
 				dialog = _dialogObjectStack.Pop ();
-				removeView (dialog.transform);
+				RemoveView (dialog.transform);
 			}
 
 			if (_dialogObjectStack.Count == 0) {
-				closeDialogBackGround ();
+				CloseDialogBackGround ();
 			}
 		}
 
-		public void closeDialogAll ()
+		public void CloseDialogAll ()
 		{
 			int count = _dialogObjectStack.Count;
 			if (count == 0) {
@@ -252,10 +252,10 @@ namespace Absir
 			GameObject dialog;
 			while (count-- > 0) {
 				dialog = _dialogObjectStack.Pop ();
-				removeView (dialog.transform);
+				RemoveView (dialog.transform);
 			}
 
-			closeDialogBackGround ();
+			CloseDialogBackGround ();
 		}
 	}
 }

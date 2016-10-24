@@ -8,17 +8,17 @@ namespace Absir
 	[SLua.GenLuaName]
 	public class AB_TabContainer : AB_Can<AB_Viewor>
 	{
-		override protected List<AB_Viewor> getComponentSort ()
+		override protected List<AB_Viewor> GetComponentSort ()
 		{
-			return GameObjectUtils.getChildrenGameObjectComponentSort<AB_Viewor> (gameObject);
+			return GameObjectUtils.GetChildrenGameObjectComponentSort<AB_Viewor> (gameObject);
 		}
 
-		override protected void initComponent (AB_Viewor viewor)
+		override protected void InitComponent (AB_Viewor viewor)
 		{
-			GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).retain ();
+			GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Retain ();
 		}
 
-		override protected bool isComponentActive (AB_Viewor component)
+		override protected bool IsComponentActive (AB_Viewor component)
 		{
 			if (component.gameObject.transform.parent != null) {
 				if (component.gameObject.activeSelf) {
@@ -26,19 +26,19 @@ namespace Absir
 				}
 			
 				component.gameObject.SetActive (true);
-				setComponentActive (component, false);
+				SetComponentActive (component, false);
 			}
 
 			return false;
 		}
 
-		override protected void setComponentActive (AB_Viewor component, bool status)
+		override protected void SetComponentActive (AB_Viewor component, bool status)
 		{
 			if (status) {
-				component.doAppearTransform (gameObject.transform);
+				component.DoAppearTransform (gameObject.transform);
 			
 			} else {
-				component.doDisappearTransform ();
+				component.DoDisappearTransform ();
 			}
 		}
 	}

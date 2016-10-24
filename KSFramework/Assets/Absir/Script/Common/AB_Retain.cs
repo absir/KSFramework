@@ -5,28 +5,28 @@ namespace Absir
 {
 	public class AB_Retain : MonoBehaviour
 	{
-		private int _retainCount;
+		private int retainCount;
 
-		public int retainCount {
+		public int RetainCount {
 			get {
-				return _retainCount;
+				return retainCount;
 			}
 		}
 
-		public void retain ()
+		public void Retain ()
 		{
-			++_retainCount;
+			++retainCount;
 		}
 
-		public void release ()
+		public void Release ()
 		{
-			--_retainCount;
+			--retainCount;
 
 		}
 
-		public void releaseCleanUp ()
+		public void ReleaseCleanUp ()
 		{
-			if (--_retainCount <= 0) {
+			if (--retainCount <= 0) {
 				Destroy (gameObject);
 			}
 		}

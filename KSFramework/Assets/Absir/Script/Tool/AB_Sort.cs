@@ -9,9 +9,9 @@ namespace Absir
 	{
 		public double behindZ = 0;
 
-		public override IEnumerator doTrigger ()
+		public override IEnumerator DoTrigger ()
 		{
-			List<GameObject> gameObjectSort = GameObjectUtils.getChildrenGameObjectSort (gameObject);
+			List<GameObject> gameObjectSort = GameObjectUtils.GetChildrenGameObjectSort (gameObject);
 			float behind = (float)behindZ;
 			int lastIndex = gameObjectSort.Count - 1;
 			for (; lastIndex >= 0; lastIndex--) {

@@ -9,23 +9,23 @@ namespace Absir
 	{
 		public AB_Bar tabBar;
 
-		override protected void initComponent ()
+		override protected void InitComponent ()
 		{
-			base.initComponent ();
+			base.InitComponent ();
 			if (tabBar == null) {
-				tabBar = ComponentUtils.fetchChildrenComponent<AB_Bar> (gameObject);
+				tabBar = ComponentUtils.FetchChildrenComponent<AB_Bar> (gameObject);
 			}
 
 			if (tabBar != null && tabBar.canComponent == null && containerTrans != null) {
-				tabBar.canComponent = ComponentUtils.getComponentObject<CanComponent> (containerTrans.gameObject);
+				tabBar.canComponent = ComponentUtils.GetComponentObject<CanComponent> (containerTrans.gameObject);
 			}
 		}
 
-		public override bool doAppear ()
+		public override bool DoAppear ()
 		{
-			if (base.doAppear ()) {
+			if (base.DoAppear ()) {
 				if (tabBar != null) {
-					(tabBar.canComponent.getActiveComponent () as AB_Viewor).doAppear ();
+					(tabBar.canComponent.GetActiveComponent () as AB_Viewor).DoAppear ();
 				}
 			
 				return true;
@@ -34,11 +34,11 @@ namespace Absir
 			return false;
 		}
 
-		public override bool doDisappear ()
+		public override bool DoDisappear ()
 		{
-			if (base.doDisappear ()) {
+			if (base.DoDisappear ()) {
 				if (tabBar != null) {
-					(tabBar.canComponent.getActiveComponent () as AB_Viewor).doDisappear ();
+					(tabBar.canComponent.GetActiveComponent () as AB_Viewor).DoDisappear ();
 				}
 			
 				return true;
@@ -47,21 +47,25 @@ namespace Absir
 			return false;
 		}
 
-		public void doDisappearTransform ()
+		override public bool DoDisappearTransform ()
 		{
-			if (base.doDisappearTransform ()) {
+			if (base.DoDisappearTransform ()) {
 				if (tabBar != null) {
 					CanComponent canComponent = tabBar.canComponent;
 					if (canComponent != null) {
-						int count = canComponent.getComponentCount ();
+						int count = canComponent.GetComponentCount ();
 						for (int i = 0; i < count; i++) {
-							AB_Viewor viewor = (AB_Viewor)canComponent.getComponentAt (i);
-							GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).release ();
-							viewor.doDisappearTransform ();
+							AB_Viewor viewor = (AB_Viewor)canComponent.GetComponentAt (i);
+							GameObjectUtils.GetOrAddComponent<AB_Retain> (viewor.gameObject).Release ();
+							viewor.DoDisappearTransform ();
 						}
 					}
 				}
+
+				return true;
 			}
+
+			return false;
 		}
 	}
 }
