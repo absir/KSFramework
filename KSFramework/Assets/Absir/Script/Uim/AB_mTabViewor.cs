@@ -4,6 +4,7 @@ using System.Collections;
 namespace Absir
 {
 	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_mTabViewor : AB_mContainer
 	{
 		public AB_Bar tabBar;
@@ -44,6 +45,23 @@ namespace Absir
 			}
 		
 			return false;
+		}
+
+		public void doDisappearTransform ()
+		{
+			if (base.doDisappearTransform ()) {
+				if (tabBar != null) {
+					CanComponent canComponent = tabBar.canComponent;
+					if (canComponent != null) {
+						int count = canComponent.getComponentCount ();
+						for (int i = 0; i < count; i++) {
+							AB_Viewor viewor = (AB_Viewor)canComponent.getComponentAt (i);
+							GameObjectUtils.getOrAddComponent<AB_Retain> (viewor.gameObject).release ();
+							viewor.doDisappearTransform ();
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -20,7 +20,9 @@ namespace Absir
 
 		public void release ()
 		{
-			--_retainCount;
+			if (--_retainCount <= 0) {
+				DestroyImmediate (gameObject);
+			}
 		}
 	}
 }

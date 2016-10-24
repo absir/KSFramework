@@ -7,6 +7,8 @@ using KSFramework;
 
 namespace Absir
 {
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_Init : MonoBehaviour
 	{
 		public static bool inited { get; protected set; }

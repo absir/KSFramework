@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace Absir
 {
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_TabContainer : AB_Can<AB_Viewor>
 	{
 		override protected List<AB_Viewor> getComponentSort ()

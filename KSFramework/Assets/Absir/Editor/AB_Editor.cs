@@ -11,6 +11,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using KEngine;
 using KEngine.Editor;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Absir
 {
@@ -25,8 +27,14 @@ namespace Absir
 				screen.gameObject.name = "AB_Screen";
 			}
 
-			screen.Awake ();
+			AB_ToolEditor.StartCoroutine (CalcScreenEditor (screen));
 			return screen;
+		}
+
+		protected static IEnumerator CalcScreenEditor (AB_Screen screen)
+		{
+			yield return 0;
+			screen.CalcScreen ();
 		}
 
 		[MenuItem ("AB_Edtior/UI(UGUI)/Create UI(UGUI)")]
@@ -48,7 +56,7 @@ namespace Absir
 					GameObject newAsset = new GameObject ();
 					newAsset.AddComponent<UIWindowAsset> ();
 					Transform newAssetTransform = newAsset.transform;
-					newAssetTransform.parent = screen.transform;
+					newAssetTransform.parent = screen.getContainer ();
 					newAssetTransform.localPosition = Vector3.zero;
 					newAssetTransform.localScale = Vector3.one;
 

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 namespace Absir
 {
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	[ExecuteInEditMode]
 	public class AB_Screen : MonoBehaviour
 	{
@@ -16,11 +18,6 @@ namespace Absir
 
 		private static AB_Screen _ME;
 
-		public static GameObject getScreenObject ()
-		{
-			return _ME.gameObject;
-		}
-
 		public Camera uiCamera = null;
 		public CanvasScaler canvasScaler;
 		public Canvas canvas;
@@ -29,6 +26,8 @@ namespace Absir
 
 		public Vector2 size;
 		public CanvasScaler.ScreenMatchMode style;
+
+		public RectTransform _container;
 
 		public Vector2 scaleOffset;
 
@@ -42,6 +41,11 @@ namespace Absir
 			if (_ME == this) {
 				_ME = null;
 			}
+		}
+
+		public RectTransform getContainer ()
+		{
+			return _container;
 		}
 
 		// Use this for initialization
@@ -99,8 +103,35 @@ namespace Absir
 				uiCamera.fieldOfView = Mathf.Atan (Mathf.Tan (uiCamera.fieldOfView / 360.0f * Mathf.PI) / localScaleX) / Mathf.PI * 360.0f;
 			}
 
+			RectTransform container = _container;
+			if (container == null) {
+				container = InitContainer ();
+				_container = container;
+			}
+
+			CalcContainer (container);
+
 			scaleOffset = calcScreenRationScaleOffset (size, style);
 			Debug.Log ("scaleOffset = " + TransformUtils.getVector2String (scaleOffset));
+		}
+
+		protected RectTransform InitContainer ()
+		{
+			GameObject container = new GameObject ();
+			container.name = "container";
+			RectTransform trans = container.AddComponent<RectTransform> ();
+			trans.parent = transform;
+			trans.localPosition = Vector3.zero;
+			trans.localScale = Vector3.one;
+			trans.sizeDelta = Vector2.zero;
+			trans.anchorMin = Vector2.zero;
+			trans.anchorMax = Vector2.one;
+			return trans;
+		}
+
+		protected void CalcContainer (RectTransform container)
+		{
+			
 		}
 
 		private static bool _calcRatio;

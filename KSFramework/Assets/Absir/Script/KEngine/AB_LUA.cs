@@ -35,15 +35,17 @@ namespace Absir
 		{
 			LoadLuaBehaviour (lua, out _luaTable, true, this);
 			if (_luaTable != null) {
-				_luaUpdateFunction = (LuaFunction)_luaTable ["Update"];
-				_luaLastUpdateFunction = (LuaFunction)_luaTable ["LateUpdate"];
 				LuaCall ("Awake");
 			}
 		}
 
 		protected void Start ()
 		{
-			LuaCall ("Start");
+			if (_luaTable != null) {
+				LuaCall ("Start");
+				_luaUpdateFunction = (LuaFunction)_luaTable ["Update"];
+				_luaLastUpdateFunction = (LuaFunction)_luaTable ["LateUpdate"];
+			}
 		}
 
 		protected void Update ()

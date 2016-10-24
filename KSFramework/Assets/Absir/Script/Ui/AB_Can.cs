@@ -6,6 +6,10 @@ namespace Absir
 {
 	public abstract class CanComponent : AB_Bas
 	{
+		abstract public int getComponentCount ();
+
+		abstract public Component getComponentAt (int index);
+
 		abstract public Component getActiveComponent ();
 
 		abstract public bool setActiveComponentIndex (int componentIndex);
@@ -73,6 +77,17 @@ namespace Absir
 		virtual protected List<T> getComponentSort ()
 		{
 			return ComponentUtils.getChildrenComponentSort<T> (targetChildren);
+		}
+
+		override public int getComponentCount ()
+		{
+			return componentSort.Count;
+		}
+
+		override public Component getComponentAt (int index)
+		{
+			int count = componentSort.Count;
+			return index < 0 || index >= count ? null : componentSort [index];
 		}
 
 		override public Component getActiveComponent ()

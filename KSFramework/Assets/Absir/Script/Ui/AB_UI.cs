@@ -115,15 +115,23 @@ namespace Absir
 			addView (viewTrans, containerTrans);
 		}
 
-		public void removeView (Transform viewTrans)
+		public bool removeView (Transform viewTrans)
 		{
 			AB_Retain retain = viewTrans.gameObject.GetComponent<AB_Retain> ();
 			if (retain == null || retain.retainCount <= 0) {
 				GameObject.Destroy (viewTrans.gameObject);
+				return true;
 
 			} else {
-				addView (viewTrans, _unactiveGameObject.transform);
+				unActiveView (viewTrans);
 			}
+
+			return false;
+		}
+
+		public void unActiveView (Transform viewTrans)
+		{
+			addView (viewTrans, _unactiveGameObject.transform);
 		}
 
 		private GameObject _dialogBackGround = null;
@@ -142,7 +150,7 @@ namespace Absir
 			closeDialogBackGround ();
 			if (dialogBackGround != null) {
 				_dialogBackGround = dialogBackGround;
-				addView (_dialogBackGround.transform, AB_Screen.getScreenObject ().transform);
+				addView (_dialogBackGround.transform, AB_Screen.ME.getContainer ());
 			}
 		}
 
@@ -170,7 +178,7 @@ namespace Absir
 			Vector3 localePosition = gameObject.transform.localPosition;
 			if (_dialogObjectStack.Count == 0) {
 				float minZ = 0;
-				foreach (Transform trans in AB_Screen.getScreenObject ().transform) {
+				foreach (Transform trans in AB_Screen.ME.getContainer ()) {
 					float z = trans.localPosition.z;
 					if (minZ > z) {
 						minZ = z;
@@ -195,7 +203,7 @@ namespace Absir
 			gameObject.transform.localPosition = localePosition;
 
 			_dialogObjectStack.Push (gameObject);
-			addViewAuto (gameObject.transform, AB_Screen.getScreenObject ().transform, false);
+			addViewAuto (gameObject.transform, AB_Screen.ME.getContainer (), false);
 		}
 
 		public GameObject currentDialog ()
