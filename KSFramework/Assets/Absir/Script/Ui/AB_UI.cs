@@ -87,7 +87,7 @@ namespace Absir
 			_nameDictRetain.TryGetValue (name, out retain);
 			if (retain != null) {
 				_nameDictRetain.Remove (name);
-				retain.release ();
+				retain.releaseCleanUp ();
 			}
 		}
 
