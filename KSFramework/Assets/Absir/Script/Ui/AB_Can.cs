@@ -35,6 +35,7 @@ namespace Absir
 				if (IsComponentActive (component)) {
 					if (activeComponent == null) {
 						activeComponent = component;
+						SetComponentActive (component, true);
 					
 					} else {
 						SetComponentActive (component, false);

@@ -11,6 +11,17 @@ namespace Absir
 
 		//public const object NULL_CALL_OBJECT = new object ();
 
+		public object NameCall (string nameCall)
+		{
+			int pos = nameCall.IndexOf (',');
+			if (pos > 0) {
+				return Call (nameCall.Substring (0, pos), nameCall.Substring (pos + 1));
+
+			} else {
+				return Call (nameCall);
+			}
+		}
+
 		public static AB_Call Find (GameObject go)
 		{
 			return ComponentUtils.GetComponentObject<AB_Call> (go);
