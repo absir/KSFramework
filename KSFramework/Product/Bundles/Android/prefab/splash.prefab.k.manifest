@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 2171121623
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e8670f9f19bc049a85335389b802dc2c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 349bc4f2d4706bb80eec0bbd9fb2ae2a
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/BundleResources/Prefab/Splash.prefab
+Dependencies: []
