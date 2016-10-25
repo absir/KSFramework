@@ -9,37 +9,32 @@ namespace Absir
 	[SLua.GenLuaName]
 	public class AB_AssetLoader : AssetFileLoader
 	{
-		public static AB_AssetLoader load (string url, AssetFileBridgeDelegate callback)
+		public static void AutoRelease (AbstractResourceLoader loader)
+		{
+			loader.AddCallback ((ok, obj) => {
+				AB_Context.ME.AddAction (() => {
+					loader.Release ();
+				});
+			});
+		}
+
+		public static AssetFileLoader AutoLoad (string path, AssetFileBridgeDelegate assetFileLoadedCallback, LoaderMode loaderMode)
+		{
+			AssetFileLoader loader = AssetFileLoader.Load (path, assetFileLoadedCallback, loaderMode);
+			AutoRelease (loader);
+			return loader;
+		}
+
+		public static Object Load (string url)
+		{
+			AssetFileLoader loader = AssetFileLoader.Load (url, null, LoaderMode.Sync);
+			AutoRelease (loader);
+			return loader.IsCompleted ? null : loader.Asset;
+		}
+
+		public static AB_AssetLoader Open (string url, AssetFileBridgeDelegate callback)
 		{
 			return new AB_AssetLoader (url, callback, LoaderMode.Sync);
-		}
-
-		protected static IEnumerator autoRelease (AbstractResourceLoader[] autoLoaders)
-		{
-			yield return 0;
-			if (autoLoaders [0] == null) {
-				yield return 0;
-			}
-
-			autoLoaders [0].Release ();
-		}
-
-		public static AssetFileLoader autoLoad (string path, AssetFileBridgeDelegate assetFileLoadedCallback, LoaderMode loaderMode)
-		{
-			// 添加扩展名
-			path = path + AppEngine.GetConfig (KEngineDefaultConfigs.AssetBundleExt);
-			AbstractResourceLoader[] autoLoaders = new AssetFileLoader[1];
-			LoaderDelgate realcallback = (isOk, obj) => {
-				if (assetFileLoadedCallback != null) {
-					assetFileLoadedCallback (isOk, obj as Object);
-				}
-
-				AB_Context.ME.StartCoroutine (autoRelease (autoLoaders));
-			};
-
-			AssetFileLoader loader = AutoNew<AssetFileLoader> (path, realcallback, false, loaderMode);
-			autoLoaders [0] = loader;
-			return loader;
 		}
 
 		public AB_AssetLoader (string url, AssetFileBridgeDelegate callback, LoaderMode mode)
