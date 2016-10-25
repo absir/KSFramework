@@ -16,9 +16,9 @@ namespace Absir
 			}
 		}
 
-		public static void Load (string uri, bool sync, Action<Object> callback)
+		public static void Load (string path, bool sync, bool mutil, Action<Object> callback)
 		{
-			ME.Load (uri, sync, callback);
+			ME.Load (path, sync, mutil, callback);
 		}
 	}
 
@@ -32,7 +32,7 @@ namespace Absir
 
 		string GetConfig (string section, string name);
 
-		void Load (string uri, bool sync, Action<Object> callback);
+		void Load (string path, bool sync, bool multi, Action<Object> callback);
 	}
 }
 

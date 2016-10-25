@@ -27,7 +27,7 @@ namespace Absir
 		public void ReleaseCleanUp ()
 		{
 			if (--retainCount <= 0) {
-				Destroy (gameObject);
+				DestroyImmediate (gameObject);
 			}
 		}
 	}

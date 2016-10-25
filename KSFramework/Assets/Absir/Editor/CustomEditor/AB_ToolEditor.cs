@@ -74,7 +74,7 @@ namespace Absir
 			if (trigger != triggering) {
 				if (trigger) {
 					triggering = true;
-					StartCoroutine (doTrigger (tool));
+					StartCoroutine (DoTrigger (tool));
 
 				} else {
 					Debug.Log (tool + " Do Trigger Intecept");
@@ -85,7 +85,7 @@ namespace Absir
 			base.OnInspectorGUI ();
 		}
 
-		public IEnumerator doTrigger (AB_Tool tool)
+		public IEnumerator DoTrigger (AB_Tool tool)
 		{
 			triggering = true;
 			Debug.Log (tool + " Do Trigger Start");

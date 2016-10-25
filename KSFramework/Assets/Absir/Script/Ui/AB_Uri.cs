@@ -18,8 +18,9 @@ namespace Absir
 				uriStack.Push (current);
 			}
 
+			string path = "ui/" + uri;
 			current = new AB_Uri (uri, sync, lId, sId);
-			Brige.ME.Load ("ui/" + uri, sync, callback);
+			Brige.Load (path, sync, false, callback);
 		}
 
 		public static void GoBack (int number, Action<Object> callback)
@@ -42,7 +43,7 @@ namespace Absir
 			}
 
 			current = uriStack.Pop ();
-			Brige.ME.Load ("ui/" + current.uri, current.sync, callback);
+			Brige.Load (current.path, current.sync, false, callback);
 		}
 
 		public static void ClearUri ()
@@ -51,7 +52,7 @@ namespace Absir
 			uriStack.Clear ();
 		}
 
-		public string uri{ get; protected set; }
+		public string path{ get; protected set; }
 
 		public bool sync { get; protected set; }
 
@@ -61,9 +62,9 @@ namespace Absir
 
 		private Dictionary<string, object> paramDict;
 
-		public AB_Uri (string uri, bool sync, long lId, string sId)
+		public AB_Uri (string path, bool sync, long lId, string sId)
 		{
-			this.uri = uri;
+			this.path = path;
 			this.sync = sync;
 			this.lId = lId;
 			this.sId = sId;

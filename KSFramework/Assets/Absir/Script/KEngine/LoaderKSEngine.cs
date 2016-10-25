@@ -42,13 +42,14 @@ namespace Absir
 			if (string.IsNullOrEmpty (url)) {
 				Log.Error ("[AB_SceneLoad:New]url为空");
 			}
-
+				
 			LoaderDelgate newCallback = null;
 			if (callback != null) {
 				newCallback = (isOk, obj) => callback (isOk, obj as Object);
 				AddCallback (newCallback);
 			}
-
+				
+			//url = url + AppEngine.GetConfig (KEngineDefaultConfigs.AssetBundleExt);
 			Init (url, mode);
 		}
 

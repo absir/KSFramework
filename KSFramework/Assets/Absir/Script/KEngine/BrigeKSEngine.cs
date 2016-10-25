@@ -27,15 +27,22 @@ namespace Absir
 			return AppEngine.GetConfig (section, name, false);
 		}
 
-		public void Load (string uri, bool sync, Action<Object> callback)
+		public void Load (string path, bool sync, bool multi, Action<Object> callback)
 		{
 			if (callback == null) {
 				return;
 			}
 
-			new AB_AssetLoader (uri, (ok, obj) => {
-				callback (obj);
-			}, sync ? LoaderMode.Sync : LoaderMode.Async);
+			if (multi) {
+				AB_AssetLoader.AutoLoad (path, (ok, obj) => {
+					callback (obj);
+				}, sync ? LoaderMode.Sync : LoaderMode.Async);
+
+			} else {
+				new AB_AssetLoader (path, (ok, obj) => {
+					callback (obj);
+				}, sync ? LoaderMode.Sync : LoaderMode.Async);
+			}
 		}
 	}
 }

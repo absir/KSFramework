@@ -24,7 +24,7 @@ namespace Absir
 		{
 			base.InitComponent ();
 			if (call != null) {
-				call = ComponentUtils.GetComponentObject<AB_Call> (gameObject);
+				call = AB_Call.Find (gameObject);
 			}
 		}
 
