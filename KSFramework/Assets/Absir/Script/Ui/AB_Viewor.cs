@@ -210,4 +210,5 @@ namespace Absir
 			SetRootViewor (GameObjectUtils.GetOrAddComponent<AB_Viewor> (go));
 		}
 	}
+
 }

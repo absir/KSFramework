@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 namespace Absir
 {
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class AB_Config
 	{
 		private static AB_Config _ME;

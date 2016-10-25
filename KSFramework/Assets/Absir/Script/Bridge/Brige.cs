@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace Absir
 {
+	[SLua.CustomLuaClassAttribute]
+	[SLua.GenLuaName]
 	public class Brige
 	{
 		private static IBrige _ME = new BrigeKSEngine ();
@@ -12,6 +14,11 @@ namespace Absir
 			get {
 				return _ME;
 			}
+		}
+
+		public static void Load (string uri, bool sync, Action<Object> callback)
+		{
+			ME.Load (uri, sync, callback);
 		}
 	}
 
@@ -24,6 +31,8 @@ namespace Absir
 		void LogError (string message);
 
 		string GetConfig (string section, string name);
+
+		void Load (string uri, bool sync, Action<Object> callback);
 	}
 }
 

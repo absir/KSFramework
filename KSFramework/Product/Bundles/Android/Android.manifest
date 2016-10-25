@@ -1,40 +1,10 @@
 ManifestFileVersion: 0
-CRC: 2010264740
+CRC: 283830451
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: scene/demo2.unity.k
+      Name: scene/main.unity.k
       Dependencies: {}
     Info_1:
-      Name: scene/testscene/testscene2.unity.k
-      Dependencies: {}
-    Info_2:
-      Name: scene/testscene/testscene.unity.k
-      Dependencies: {}
-    Info_3:
-      Name: ui/newui_f2gged2y.u2p.prefab.k
-      Dependencies: {}
-    Info_4:
-      Name: ui/newui_ll6fmniv.klz.prefab.k
-      Dependencies: {}
-    Info_5:
-      Name: ui/newui_7ggtkx0x.ay0.prefab.k
-      Dependencies: {}
-    Info_6:
-      Name: ui/demo2.prefab.k
-      Dependencies: {}
-    Info_7:
-      Name: ui/login.prefab.k
-      Dependencies: {}
-    Info_8:
-      Name: ui/newui_wynexc6m.u2m.prefab.k
-      Dependencies: {}
-    Info_9:
-      Name: ui/demo.prefab.k
-      Dependencies: {}
-    Info_10:
-      Name: ui/newui_bac038c5.toz.prefab.k
-      Dependencies: {}
-    Info_11:
-      Name: prefab/camera.prefab.k
+      Name: prefab/splash.prefab.k
       Dependencies: {}

@@ -37,4 +37,12 @@ function UIDemo:OnOpen()
     AB_Animator.PayAnimatorName(animator, 'DemoAni', 0, callback);
 end
 
+function UIDemo:Awake()
+    Log.Info('UIDemo Awake, do your logic')
+end
+
+function UIDemo:Start()
+    Log.Info('UIDemo Start, do your logic')
+end
+
 return UIDemo

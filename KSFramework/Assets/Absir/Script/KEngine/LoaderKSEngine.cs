@@ -14,6 +14,34 @@ namespace Absir
 			return new AB_AssetLoader (url, callback, LoaderMode.Sync);
 		}
 
+		protected static IEnumerator autoRelease (AbstractResourceLoader[] autoLoaders)
+		{
+			yield return 0;
+			if (autoLoaders [0] == null) {
+				yield return 0;
+			}
+
+			autoLoaders [0].Release ();
+		}
+
+		public static AssetFileLoader autoLoad (string path, AssetFileBridgeDelegate assetFileLoadedCallback, LoaderMode loaderMode)
+		{
+			// 添加扩展名
+			path = path + AppEngine.GetConfig (KEngineDefaultConfigs.AssetBundleExt);
+			AbstractResourceLoader[] autoLoaders = new AssetFileLoader[1];
+			LoaderDelgate realcallback = (isOk, obj) => {
+				if (assetFileLoadedCallback != null) {
+					assetFileLoadedCallback (isOk, obj as Object);
+				}
+
+				AB_Context.ME.StartCoroutine (autoRelease (autoLoaders));
+			};
+
+			AssetFileLoader loader = AutoNew<AssetFileLoader> (path, realcallback, false, loaderMode);
+			autoLoaders [0] = loader;
+			return loader;
+		}
+
 		public AB_AssetLoader (string url, AssetFileBridgeDelegate callback, LoaderMode mode)
 		{
 			if (string.IsNullOrEmpty (url)) {
@@ -32,7 +60,7 @@ namespace Absir
 		protected override void OnFinish (object resultObj)
 		{
 			base.OnFinish (resultObj);
-			DoDispose ();
+			AB_Context.ME.AddAction (DoDispose);
 		}
 	}
 
