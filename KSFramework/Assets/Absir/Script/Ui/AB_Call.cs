@@ -11,14 +11,14 @@ namespace Absir
 
 		//public const object NULL_CALL_OBJECT = new object ();
 
-		public object NameCall (string nameCall)
+		public void NameCall (string nameCall)
 		{
 			int pos = nameCall.IndexOf (',');
 			if (pos > 0) {
-				return Call (nameCall.Substring (0, pos), nameCall.Substring (pos + 1));
+				Call (nameCall.Substring (0, pos), nameCall.Substring (pos + 1));
 
 			} else {
-				return Call (nameCall);
+				Call (nameCall);
 			}
 		}
 

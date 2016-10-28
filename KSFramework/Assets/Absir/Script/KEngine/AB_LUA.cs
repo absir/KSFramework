@@ -149,6 +149,18 @@ namespace Absir
 			if (luaTable != null) {
 				var luaCallObj = luaTable [call];
 				if (luaCallObj != null) {
+					int length = args == null ? 0 : args.Length;
+					if (length > 0) {
+						object[] newArgs = new object[length + 1];
+						int i = 0;
+						newArgs [i++] = luaCallObj;
+						foreach (object arg in args) {
+							newArgs [i++] = arg;
+						}
+
+						args = newArgs;
+					}
+
 					return (luaCallObj as LuaFunction).call (args);
 				}
 			}
