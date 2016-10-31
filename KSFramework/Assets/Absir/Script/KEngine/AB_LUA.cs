@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using SLua;
 using KSFramework;
 using KEngine;
@@ -25,7 +26,7 @@ namespace Absir
 
 		override public object Call (string call, params object[] args)
 		{
-			return LuaTableCall (_luaTable, call, args);
+			return LuaTableCall (_luaTable, call, args == null || args.Length == 0 ? _cacheParam : args);
 		}
 
 		override public void NameCall (string nameCall)
@@ -108,6 +109,19 @@ namespace Absir
 			return lua;
 		}
 
+		protected static Dictionary<string, Func<object, GameObject>> typeDictFunc = new Dictionary<string, Func<object, GameObject>> ();
+
+		static AB_LUA ()
+		{
+			typeDictFunc.Add ("UnityEngine.Transform", (go) => {
+				return go.transform;
+			});
+
+			typeDictFunc.Add ("UnityEngine.RectTransform", (go) => {
+				return go.transform;
+			});
+		}
+
 		public static bool LoadLuaTable (string lua, out LuaTable luaTable, bool showWarn, Component component)
 		{
 			luaTable = null;
@@ -140,12 +154,26 @@ namespace Absir
 				for (var i = 0; i < outlet.OutletInfos.Count; i++) {
 					var outletInfo = outlet.OutletInfos [i];
 
-					var gameObj = outletInfo.Object as GameObject;
+					object obj = outletInfo.Object;
+					var gameObj = obj as GameObject;
+					if (gameObj != null) {
+						string type = outletInfo.ComponentType;
+						Func<object, GameObject> func = null;
+						typeDictFunc.TryGetValue (type, out func);
+						if (func == null) {
+							obj = gameObj.GetComponent (outletInfo.ComponentType);
 
-					if (gameObj != null)
-						luaTable [outletInfo.Name] = gameObj.GetComponent (outletInfo.ComponentType);
-					else
-						luaTable [outletInfo.Name] = outletInfo.Object;
+						} else {
+							obj = func (gameObj);
+						}
+
+						if (obj == null) {
+							obj = outletInfo.Object;
+						}
+					} 
+
+					luaTable [outletInfo.Name] = obj;
+					//Debug.Log (outletInfo.Name + " = " + outletInfo.ComponentType + " : " + obj);
 				}
 
 				DestroyObject (outlet);
