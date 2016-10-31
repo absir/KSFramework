@@ -7,6 +7,16 @@ namespace Absir
 {
 	public class BrigeKSEngine : IBrige
 	{
+		private string ext;
+
+		private string prefabExt;
+
+		public BrigeKSEngine ()
+		{
+			ext = AppEngine.GetConfig (KEngineDefaultConfigs.AssetBundleExt);
+			prefabExt = ".prefab" + ext;
+		}
+
 		public void LogInfo (string message)
 		{
 			Log.Info (message);
@@ -33,6 +43,7 @@ namespace Absir
 				return;
 			}
 
+			path += prefabExt;
 			if (multi) {
 				AB_AssetLoader.AutoLoad (path, (ok, obj) => {
 					callback (obj);

@@ -194,12 +194,12 @@ namespace Absir
 		{
 			AB_Viewor rootViewor = GetRootViewor ();
 			Transform rootContainer;
-			if (rootViewor == null) {
+			if (rootViewor == null || rootViewor == viewor) {
 				rootContainer = AB_Screen.ME.getContainer ();
-				ClearViewor (rootViewor);
 			
 			} else {
 				rootContainer = rootViewor.transform.parent;
+				ClearViewor (rootViewor);
 			}
 
 			viewor.DoAppearTransform (rootContainer);
