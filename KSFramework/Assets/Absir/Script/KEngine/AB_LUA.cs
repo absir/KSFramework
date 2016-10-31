@@ -17,6 +17,8 @@ namespace Absir
 
 		protected LuaTable _luaTable;
 
+		protected object[] _cacheParam;
+
 		private LuaFunction _luaUpdateFunction;
 
 		private LuaFunction _luaLastUpdateFunction;
@@ -24,6 +26,19 @@ namespace Absir
 		override public object Call (string call, params object[] args)
 		{
 			return LuaTableCall (_luaTable, call, args);
+		}
+
+		override public void NameCall (string nameCall)
+		{
+			if (_luaTable != null) {
+				int pos = nameCall.IndexOf (',');
+				if (pos > 0) {
+					Call (nameCall.Substring (0, pos), _luaTable, nameCall.Substring (pos + 1));
+
+				} else {
+					Call (nameCall, _cacheParam);
+				}
+			}
 		}
 
 		public LuaTable LuaTable ()
@@ -40,14 +55,15 @@ namespace Absir
 		{
 			LoadLuaTable (lua, out _luaTable, true, this);
 			if (_luaTable != null) {
-				Call ("Awake");
+				_cacheParam = new object[]{ _luaTable };
+				Call ("Awake", _cacheParam);
 			}
 		}
 
 		protected void Start ()
 		{
 			if (_luaTable != null) {
-				Call ("Start");
+				Call ("Start", _cacheParam);
 				_luaUpdateFunction = (LuaFunction)_luaTable ["Update"];
 				_luaLastUpdateFunction = (LuaFunction)_luaTable ["LateUpdate"];
 			}
@@ -56,30 +72,30 @@ namespace Absir
 		protected void Update ()
 		{
 			if (_luaUpdateFunction != null) {
-				_luaUpdateFunction.call ();
+				_luaUpdateFunction.call (_cacheParam);
 			}
 		}
 
 		protected void LateUpdate ()
 		{
 			if (_luaLastUpdateFunction != null) {
-				_luaLastUpdateFunction.call ();
+				_luaLastUpdateFunction.call (_cacheParam);
 			}
 		}
 
 		protected void OnEnable ()
 		{
-			Call ("OnEnable");
+			Call ("OnEnable", _cacheParam);
 		}
 
 		protected void OnDisable ()
 		{
-			Call ("OnDisable");
+			Call ("OnDisable", _cacheParam);
 		}
 
 		protected void OnDestory ()
 		{
-			Call ("OnDestory");
+			Call ("OnDestory", _cacheParam);
 			#if UNITY_EDITOR
 			if (!string.IsNullOrEmpty (lua) && OnDestoryReload) {
 				ClearLuaCache (lua);
@@ -146,19 +162,34 @@ namespace Absir
 
 		public static object LuaTableCall (LuaTable luaTable, string call, params object[] args)
 		{
+			return LuaTableCallSelf (luaTable, call, true, args);
+		}
+
+		public static object LuaTableCallSelf (LuaTable luaTable, string call, bool selfCheck, params object[] args)
+		{
 			if (luaTable != null) {
 				var luaCallObj = luaTable [call];
 				if (luaCallObj != null) {
-					int length = args == null ? 0 : args.Length;
-					if (length > 0) {
-						object[] newArgs = new object[length + 1];
-						int i = 0;
-						newArgs [i++] = luaCallObj;
-						foreach (object arg in args) {
-							newArgs [i++] = arg;
-						}
+					if (selfCheck) {
+						int length = args == null ? 0 : args.Length;
+						if (length > 0) {
+							if (args [0] != luaTable) {
+								object[] newArgs = new object[length + 1];
+								newArgs [0] = luaTable;
+								int i = 0;
+								newArgs [i++] = luaCallObj;
+								foreach (object arg in args) {
+									newArgs [i++] = arg;
+								}
 
-						args = newArgs;
+								args = newArgs;
+							}
+
+						} else {
+							object[] newArgs = new object[1];
+							newArgs [0] = luaTable;
+							args = newArgs;
+						}
 					}
 
 					return (luaCallObj as LuaFunction).call (args);

@@ -8,14 +8,16 @@ local UIDemo = {}
 extends(UIDemo, UIBase)
 
 -- create a ui instance
-function UIDemo.New(controller)
-    local newUI = new(UIDemo)
-    newUI.Controller = controller
-    return newUI
+function UIDemo.New(controller, slf)
+    local self = new(UIDemo)
+    self.Controller = controller
+    self.self = self;
+    return self
 end
 
 function UIDemo:OnInit(controller)
     Log.Info('UIDemo OnInit, do controls binding')
+    Log.Info('self = {0}', self)
 end
 
 function UIDemo:OnOpen()
@@ -43,6 +45,7 @@ end
 
 function UIDemo:Start()
     Log.Info('UIDemo Start, do your logic')
+    Log.Info('self = {0}', self)
 end
 
 return UIDemo

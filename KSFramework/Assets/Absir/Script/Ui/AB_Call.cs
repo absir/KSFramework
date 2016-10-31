@@ -11,7 +11,7 @@ namespace Absir
 
 		//public const object NULL_CALL_OBJECT = new object ();
 
-		public void NameCall (string nameCall)
+		public virtual void NameCall (string nameCall)
 		{
 			int pos = nameCall.IndexOf (',');
 			if (pos > 0) {
