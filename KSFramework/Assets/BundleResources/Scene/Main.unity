@@ -357,9 +357,9 @@ Camera:
     height: 1
   near clip plane: -2
   far clip plane: 20
-  field of view: 179.7317
+  field of view: 179.65117
   orthographic: 1
-  orthographic size: 740.0451
+  orthographic size: 569.1667
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -538,7 +538,7 @@ MonoBehaviour:
   size: {x: 640, y: 960}
   style: 1
   _container: {fileID: 783336711}
-  scaleOffset: {x: 96.072235, y: 260.04517}
+  scaleOffset: {x: 0, y: 89.166626}
 --- !u!224 &1524193677
 RectTransform:
   m_ObjectHideFlags: 0
@@ -580,6 +580,7 @@ GameObject:
   - 114: {fileID: 1824377490}
   - 114: {fileID: 1824377492}
   - 114: {fileID: 1824377491}
+  - 114: {fileID: 1824377493}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -639,6 +640,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc529fdbc0e7413ea00d0af0805081a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1824377493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1824377488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c01f3f0b88b4448ab1ccfa117a1d57e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OutletInfos:
+  - Name: test2
+    ComponentType: UnityEngine.RectTransform
+    Object: {fileID: 1920592263}
+  - Name: test
+    ComponentType: AB_Awake
+    Object: {fileID: 1920592263}
 --- !u!1 &1920592263
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,3 +750,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24268444998e0460296f1e33e9fedad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shareTag: 
+  requiries: []

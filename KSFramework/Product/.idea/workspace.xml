@@ -21,12 +21,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Demo.lua" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Demo.lua" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Lua/UI/Demo/Demo.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="47" column="32" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
+            <state relative-caret-position="584">
+              <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="1.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Lua/UI/Demo/1.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="301">
+              <caret line="949" column="10" selection-start-line="949" selection-start-column="10" selection-end-line="949" selection-end-column="10" />
+              <folding>
+                <element signature="n#!!doc;n#CompatibilityCheck#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -66,7 +78,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
               <caret line="7" column="13" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="13" />
-              <folding />
+              <folding>
+                <marker date="1477294182000" expanded="true" signature="153:201" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -93,6 +107,13 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -101,6 +122,7 @@
         <option value="$PROJECT_DIR$/Lua/Behaviour/Main.lua" />
         <option value="$PROJECT_DIR$/Lua/Main.lua" />
         <option value="$PROJECT_DIR$/Lua/UI/Demo/Demo.lua" />
+        <option value="$PROJECT_DIR$/Lua/UI/Demo/1.js" />
       </list>
     </option>
   </component>
@@ -110,9 +132,10 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="-1482" />
     <option name="y" value="23" />
     <option name="width" value="1920" />
-    <option name="height" value="1009" />
+    <option name="height" value="833" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -467,15 +490,15 @@
       <workItem from="1474166615914" duration="939000" />
       <workItem from="1474168244309" duration="57000" />
       <workItem from="1474168312895" duration="18688000" />
-      <workItem from="1477290213422" duration="3445000" />
+      <workItem from="1477290213422" duration="4672000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23129000" />
+    <option name="totallyTimeSpent" value="24356000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1920" height="1009" extended-state="6" />
+    <frame x="-1482" y="23" width="1920" height="833" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -605,7 +628,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="13" />
-          <folding />
+          <folding>
+            <marker date="1477294182000" expanded="true" signature="153:201" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -619,9 +644,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Lua/UI/Demo/Demo.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="32" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
+        <state relative-caret-position="584">
+          <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Lua/UI/Demo/1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="949" column="10" selection-start-line="949" selection-start-column="10" selection-end-line="949" selection-end-column="10" />
+          <folding>
+            <element signature="n#!!doc;n#CompatibilityCheck#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

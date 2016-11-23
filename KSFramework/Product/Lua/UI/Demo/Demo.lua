@@ -46,6 +46,10 @@ end
 function UIDemo:Start()
     Log.Info('UIDemo Start, do your logic')
     Log.Info('self = {0}', self)
+
+    Log.Info('self.test = {0}', self.test)
+    Log.Info('self.test2 = {0}', self.testa)
+    Log.Info('self.test2 = {0}', self.testa.localPosition)
 end
 
 return UIDemo
