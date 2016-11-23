@@ -49,11 +49,23 @@ namespace Absir
 
 		protected void Awake ()
 		{
-			AB_Game.AddLogicStartActions (AwakeLua);
+			if (string.IsNullOrEmpty (lua)) {
+				AB_Game.AddLogicStartActions (AwakeLua);
+			}
 		}
 
 		protected void AwakeLua ()
 		{
+			LoadAwakeLua (lua);
+		}
+
+		public void LoadAwakeLua (string lua)
+		{
+			if (_luaTable != null) {
+				throw new UnityException (gameObject.name + " has load lua " + this.lua + ", could not load other lua " + lua);
+			}
+
+			this.lua = lua;
 			LoadLuaTable (lua, out _luaTable, true, this);
 			if (_luaTable != null) {
 				_cacheParam = new object[]{ _luaTable };
@@ -107,6 +119,12 @@ namespace Absir
 		public static string LuaRelPath (string lua)
 		{
 			return lua;
+		}
+
+		public static bool HasLuaPath (string lua)
+		{
+			var relPath = LuaRelPath (lua);
+			return KSGame.Instance.LuaModule.HasScript (relPath);
 		}
 
 		protected static Dictionary<string, Func<object, GameObject>> typeDictFunc = new Dictionary<string, Func<object, GameObject>> ();

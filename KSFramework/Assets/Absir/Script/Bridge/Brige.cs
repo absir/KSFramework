@@ -33,6 +33,8 @@ namespace Absir
 		string GetConfig (string section, string name);
 
 		void Load (string path, bool sync, bool multi, Action<Object> callback);
+
+		AB_Call LoadCall (GameObject go, string callPath);
 	}
 }
 

@@ -55,6 +55,18 @@ namespace Absir
 				}, sync ? LoaderMode.Sync : LoaderMode.Async);
 			}
 		}
+
+		public AB_Call LoadCall (GameObject go, string callPath)
+		{
+			string lua = callPath + "/" + go.name;
+			if (AB_LUA.HasLuaPath (lua)) {
+				AB_LUA call = go.AddComponent<AB_LUA> ();
+				call.LoadAwakeLua (lua);
+				return call;
+			}
+
+			return null;
+		}
 	}
 }
 

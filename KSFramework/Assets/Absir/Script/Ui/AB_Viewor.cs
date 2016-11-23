@@ -12,6 +12,8 @@ namespace Absir
 
 		public const string _ViewDidDisappear = "ViewDidDisappear";
 
+		private bool callInited;
+
 		public AB_Call call;
 
 		//public bool appeared { get; private set; }
@@ -23,13 +25,22 @@ namespace Absir
 		override protected void InitComponent ()
 		{
 			base.InitComponent ();
-			if (call != null) {
-				call = AB_Call.Find (gameObject);
+			CallInit ();
+		}
+
+		protected void CallInit ()
+		{
+			if (!callInited) {
+				callInited = true;
+				call = AB_Call.FindCall (gameObject, "Viewor");
 			}
 		}
 
 		public virtual bool DoAppear ()
 		{
+			// Start之前CallInit
+			CallInit ();
+
 //			if (appeared) {
 //				return false;
 //			}
