@@ -71,14 +71,16 @@ namespace Absir
 			Debug.Log ("ScanChannels Path = " + ChannelsPath);
 			List<string> channelDirs = new List<string> ();
 			List<string> channelNames = new List<string> ();
-			foreach (string dirPath in Directory.GetDirectories (ChannelsPath)) {
-				FileInfo configFile = new FileInfo (Path.Combine (dirPath, "config.properties"));
-				if (configFile.Exists) {
-					string channelDir = new DirectoryInfo (dirPath).Name;
-					IDictionary<string, object> configMap = GetChannelConfig (channelDir);
-					string channelName = GetChannelName (channelDir, configMap);
-					channelDirs.Add (channelDir);
-					channelNames.Add (channelName);
+			if (Directory.Exists (ChannelsPath)) {
+				foreach (string dirPath in Directory.GetDirectories (ChannelsPath)) {
+					FileInfo configFile = new FileInfo (Path.Combine (dirPath, "config.properties"));
+					if (configFile.Exists) {
+						string channelDir = new DirectoryInfo (dirPath).Name;
+						IDictionary<string, object> configMap = GetChannelConfig (channelDir);
+						string channelName = GetChannelName (channelDir, configMap);
+						channelDirs.Add (channelDir);
+						channelNames.Add (channelName);
+					}
 				}
 			}
 				
