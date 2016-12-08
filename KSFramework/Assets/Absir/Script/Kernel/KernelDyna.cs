@@ -189,7 +189,7 @@ namespace Absir
 			try {
 				return Convert.ChangeType (date.Ticks, t);
 
-			} catch (Exception e) {
+			} catch (Exception) {
 			}
 
 			return null;
@@ -222,7 +222,7 @@ namespace Absir
 			try {
 				return Convert.ChangeType (em, t);
 
-			} catch (Exception e) {
+			} catch (Exception) {
 			}
 
 			return null;
@@ -297,7 +297,7 @@ namespace Absir
 			try {
 				return Convert.ChangeType (str, t);
 
-			} catch (Exception e) {
+			} catch (Exception) {
 			}
 
 			if (dynas != null && dynas.Length > 0) {
@@ -376,8 +376,8 @@ namespace Absir
 		{
 			try {
 				if (str.IndexOfAny (DATE_CHARS) > 0) {
-					DateTime date = toDate (str);
-					return date == null ? 0 : date.Ticks;
+					DateTime? date = toDate (str, null);
+					return date == null ? 0 : ((DateTime)date).Ticks;
 				}
 
 				return Convert.ToInt64 (str);
@@ -469,10 +469,10 @@ namespace Absir
 
 		public static DateTime toDate (string str)
 		{
-			return toDate (str, DATE_ZERO);
+			return (DateTime)toDate (str, DATE_ZERO);
 		}
 
-		public static DateTime toDate (string str, DateTime defaultValue)
+		public static DateTime? toDate (string str, DateTime? defaultValue)
 		{
 			foreach (DateFormat dateFormat in DATE_FORMAT_ARRAY) {
 				try {

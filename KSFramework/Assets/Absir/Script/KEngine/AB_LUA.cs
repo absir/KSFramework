@@ -219,7 +219,7 @@ namespace Absir
 					if (selfCheck) {
 						int length = args == null ? 0 : args.Length;
 						if (length > 0) {
-							if (args [0] != luaTable) {
+							if (args [0] != (object)luaTable) {
 								object[] newArgs = new object[length + 1];
 								newArgs [0] = luaTable;
 								int i = 0;

@@ -49,7 +49,7 @@ namespace Absir
 						screen = GetScreen ();
 					}
 
-					Transform assetTransform = asset.transform;
+					//Transform assetTransform = asset.transform;
 					//Vector3 localScale = assetTransform.localScale;
 
 					string assetName = asset.name;

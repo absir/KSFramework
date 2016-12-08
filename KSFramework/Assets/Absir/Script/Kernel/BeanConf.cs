@@ -61,11 +61,11 @@ namespace Absir
 		protected override System.IO.Stream GetConfStream ()
 		{
 			string nameConf = GetType ().FullName;
-			Debug.Log ("finding nameConf = " + nameConf);
+			//Debug.Log ("finding nameConf = " + nameConf);
 			TextAsset text = Resources.Load<TextAsset> (nameConf);
 			if (text == null) {
 				nameConf = GetType ().Name;
-				Debug.Log ("finding nameConf = " + nameConf);
+				//Debug.Log ("finding nameConf = " + nameConf);
 				text = Resources.Load<TextAsset> (nameConf);
 				if (text == null) {
 					return null;

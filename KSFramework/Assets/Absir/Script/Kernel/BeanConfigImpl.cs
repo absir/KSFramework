@@ -78,6 +78,21 @@ namespace Absir
 		void doWith (T template);
 	}
 
+	public class CallbackBreakAction<T> : CallbackBreak<T>
+	{
+		private Action<T> action;
+
+		public CallbackBreakAction (Action<T> action)
+		{
+			this.action = action;
+		}
+
+		public void doWith (T template)
+		{
+			action (template);
+		}
+	}
+
 	public delegate void CallbackTemplate<T> (T arg1);
 
 	public static class BeanConfigIO
@@ -196,6 +211,8 @@ namespace Absir
 				if (reader != null) {
 					reader.Close ();
 				}
+
+				input.Close ();
 			}
 		}
 
@@ -233,12 +250,12 @@ namespace Absir
 		private Environment environment = Environment.DEVELOP;
 		private IDictionary<string, object> configMap = new Dictionary<string, object> ();
 
-		public  string getClassPath (string filename)
+		public string getClassPath (string filename)
 		{
 			return getResourcePath (filename, classPath);
 		}
 
-		public  string getResourcePath (string filename)
+		public string getResourcePath (string filename)
 		{
 			return getResourcePath (filename, resourcePath);
 		}
@@ -631,7 +648,7 @@ namespace Absir
 		{
 			object obj = Get<object> (map, name);
 			if (obj != null) {
-				object toObject = KernelDyna.to (obj, t);
+				object toObject = dynaToType (obj, null, t);
 				if (toObject != obj) {
 					map.Remove (name);
 					map [name] = toObject;
@@ -645,10 +662,16 @@ namespace Absir
 
 		public static object dynaToType (object obj, string beanName, Type t)
 		{
-			if (t.IsAssignableFrom (typeof(IList))) {
-				if (!(obj is IList)) {
+			if (t == typeof(IList) || t == typeof(List<object>)) {
+				if (obj != null && obj is IList) {
+					return obj;
+
+				} else {
 					IList list = new List<object> ();
-					list.Add (obj);
+					if (obj != null) {
+						list.Add (obj);
+					}
+
 					return list;
 				}
 			}
@@ -658,7 +681,7 @@ namespace Absir
 
 		public static T getMapValue<T> (IDictionary<string, object> map, string name, string beanName = null)
 		{
-			return (T)getMapObject (map, beanName, typeof(T));
+			return (T)getMapObject (map, name, typeof(T));
 		}
 
 		public static T dynaTo<T> (object obj, string beanName)
@@ -669,9 +692,9 @@ namespace Absir
 		protected internal virtual void loadBeanConfig (List<string> propertyFilenames, HashSet<string> loadedPropertyFilenames, IDictionary<string, CallbackTemplate<string>> beanConfigTemplates)
 		{
 			beanConfigTemplates ["environment"] = (value) => {
-				Environment env = dynaTo<Environment> (value, null);
+				Environment? env = dynaTo<Environment?> (value, null);
 				if (env != null) {
-					Environment = env;
+					Environment = (Environment)env;
 				}
 			};
 
@@ -681,7 +704,7 @@ namespace Absir
 
 
 			beanConfigTemplates ["inEnvironment"] = (value) => {
-				Environment env = dynaTo<Environment> (value, null);
+				Environment? env = dynaTo<Environment?> (value, null);
 				if (env != null) {
 					outEnvironmentDenied = env == environment;
 				}
