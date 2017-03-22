@@ -5,16 +5,19 @@ using System.Collections.Generic;
 public class ABLang
 {
 
-	public static class Map<K, V> : Dictionary<K, V>
+	public class Map<K, V> : Dictionary<K, V>
 	{
+		
+		public void Add (K key, V value)
+		{
+			SaveAdd (key, value);
+		}
 
-		public override void Add (K key, V value)
+		public void SaveAdd (K key, V value)
 		{
 			base.Remove (key);
-			base.Add (T, K);
+			base.Add (key, value);
 		}
 	}
-
-
 
 }
