@@ -9,11 +9,11 @@ namespace Absir
 		bool IsInitAsync ();
 
 		void AutoLogin ();
-		
+
 		void Login (string type, bool changeAccount);
-		
+
 		bool Logout ();
-		
+
 		string GetLoginUsername (string loginInfo);
 
 		/*
@@ -28,11 +28,13 @@ namespace Absir
 		 * roleCTime; //游戏角色创建时间 ——毫秒值(10位数) 必填
 		 */
 		void SubmitPlayInfo (int dataType, long roleID, string roleName, int roleLevel, long serverID, string serverName, int moneyNum, int vip, long roleCTime);
-		
+
 		string PreparePay (string id, string name, string desc, int originPrice, int currentPrice, int number, string data);
-		
+
 		void PayOrderInfo (string orderId, string payInfo, string id, string name, string desc, int originPrice, int currentPrice, int number, string data);
 
+		void PayAdvertisement (string id, int type, string data);
+		 
 	}
 
 	public class AB_SDK : MonoBehaviour
@@ -40,9 +42,9 @@ namespace Absir
 		public static AB_SDK ME {
 			get {
 				if (_ME == null) {
-				    GameObject sdk = new GameObject {name = "AB_SDK"};
-				    _ME = sdk.AddComponent<AB_SDK> ();
-					GameObject.DontDestroyOnLoad(sdk);
+					GameObject sdk = new GameObject { name = "AB_SDK" };
+					_ME = sdk.AddComponent<AB_SDK> ();
+					GameObject.DontDestroyOnLoad (sdk);
 				}				
 				return _ME;
 			}
@@ -77,7 +79,7 @@ namespace Absir
 		{
 			_ME = this;
 		}
-		
+
 		void OnDisable ()
 		{
 			if (_ME == this) {
@@ -165,11 +167,17 @@ namespace Absir
 			_payment.PayFail (reason);
 		}
 
+		public void PayAdvertisement (string data)
+		{
+			string[] datas = data.Split (',');
+			_sdk.PayAdvertisement (datas [0], int.Parse (datas [1]), datas [2]);
+		}
+
 		private int roleId;
 		private string paymentsKey;
 		private IList<Payment> rolePayments;
 		private bool paymentValidating;
-		
+
 		public void LoginRoleId (int roleId)
 		{
 			if (_payment == null) {
@@ -228,7 +236,7 @@ namespace Absir
 			} 
 		}
 
-#if( true || !(UNITY_ANDROID || UNITY_IOS)) || SDK_IN_UNITY
+		#if( true || !(UNITY_ANDROID || UNITY_IOS)) || SDK_IN_UNITY
 		public static bool IsInitAsync ()
 		{
 			return _sdk.IsInitAsync ();
@@ -238,39 +246,44 @@ namespace Absir
 		{
 			_sdk.AutoLogin ();
 		}
-		
+
 		protected static void Login (string type, bool changeAccount)
 		{
 			_sdk.Login (type, changeAccount);
 		}
-		
+
 		public static bool Logout ()
 		{
 			return _sdk.Logout ();
 		}
-		
+
 		public static string GetLoginUsername (string loginInfo)
 		{
 			return _sdk.GetLoginUsername (loginInfo);
 		}
-		
+
 		public static void SubmitPlayInfo (int dataType, long roleID, string roleName, int roleLevel, long serverID, string serverName, int moneyNum, int vip, long roleCTime)
 		{
 			_sdk.SubmitPlayInfo (dataType, roleID, roleName, roleLevel, serverID, serverName, moneyNum, vip, roleCTime);
 		}
-		
+
 		public static string PreparePay (string id, string name, string desc, int originPrice, int currentPrice, int number, string data)
 		{
 			return _sdk.PreparePay (id, name, desc, originPrice, currentPrice, number, data);
 		}
-		
+
 		public static void PayOrderInfo (string orderId, string payInfo, string id, string name, string desc, int originPrice, int currentPrice, int number, string data)
 		{
 			_sdk.PayOrderInfo (orderId, payInfo, id, name, desc, originPrice, currentPrice, number, data);
 		}
 
-#elif UNITY_ANDROID
+		public static void PayAdvertisement (string id, int type, string data)
+		{
+			_sdk.PayAdvertisement (id, type, data);
+		}
 
+		#elif UNITY_ANDROID
+		
 		private static bool _loaded;
 
 		private static AndroidJavaObject _adapter;
@@ -329,8 +342,20 @@ namespace Absir
 			Adapter.Call("payOrderInfo", orderId, payInfo, id, name, desc, originPrice, currentPrice, number, data);
 		}
 
-#elif UNITY_IOS
+		public static void PayAdvertisement (string id, int type, string data)
+		{
+			Adapter.Call("payAdvertisement", id, type, data);
+		}
 
+
+
+
+
+
+
+
+#elif UNITY_IOS
+		
 		[System.Runtime.InteropServices.DllImport("__Internal")]
 		public static extern bool IsInitAsync();
 
@@ -370,6 +395,8 @@ namespace Absir
 		[System.Runtime.InteropServices.DllImport("__Internal")]
 		public static extern void PayOrderInfo(string orderId, string payInfo, string id, string name, string desc, int originPrice, int currentPrice, int number, string data);
 
+		[System.Runtime.InteropServices.DllImport("__Internal")]
+		public static extern void PayAdvertisement (string id, int type, string data);
 #endif
 
 	}

@@ -44,23 +44,23 @@ namespace Absir
 			return componentList;
 		}
 
-		public static T GetComponentObject<T> (GameObject gameObject) where T : Object
+		public static T GetComponentObject<T> (GameObject gameObject)
 		{
 			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
-					return (T)(Object)component;
+					return (T)(object)component;
 				}
 			}
 		
-			return null;
+			return default(T);
 		}
 
-		public static List<T> GetComponentObjects<T> (GameObject gameObject) where T : Object
+		public static List<T> GetComponentObjects<T> (GameObject gameObject)
 		{
 			List<T> componentList = new List<T> ();
 			foreach (Component component in gameObject.GetComponents<Component>()) {
 				if (component is T) {
-					componentList.Add ((T)(Object)component);
+					componentList.Add ((T)(object)component);
 				}
 			}
 		

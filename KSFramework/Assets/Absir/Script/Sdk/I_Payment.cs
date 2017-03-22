@@ -29,5 +29,8 @@ namespace Absir
 		string encodePayments (IList<Payment> payments);
 
 		IEnumerator validatePayment (Payment payment);
+
+		// type 0=Finished 1=Skipped 2=Failed
+		void finishAdvertisement(string id, int type, string data);
 	}
 }
