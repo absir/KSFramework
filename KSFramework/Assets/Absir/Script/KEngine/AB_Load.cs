@@ -30,9 +30,9 @@ namespace Absir
 		protected void Load ()
 		{
 			if (!string.IsNullOrEmpty (loadUrl)) {
-				bool contain = KResourceModule.ContainsResourceUrl (loadUrl);
-				Debug.Log ("AB_Load loadUrl " + loadUrl + " contain " + contain);
-				if (contain) {
+				//bool contain = KResourceModule.ContainsResourceUrl (loadUrl);
+				//Debug.Log ("AB_Load loadUrl " + loadUrl + " contain " + contain);
+				if (true) {
 					new AB_AssetLoader (loadUrl, (ok, result) => {
 						Debug.Log ("AB_Load load result " + ok + " : " + result);
 						if (!ok || result == null) {

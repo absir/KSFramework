@@ -49,7 +49,7 @@ namespace Absir
 
 		protected void Awake ()
 		{
-			if (string.IsNullOrEmpty (lua)) {
+			if (!string.IsNullOrEmpty (lua)) {
 				AB_Game.AddLogicStartActions (AwakeLua);
 			}
 		}
