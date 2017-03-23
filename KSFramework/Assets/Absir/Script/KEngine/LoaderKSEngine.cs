@@ -29,7 +29,13 @@ namespace Absir
 		{
 			AssetFileLoader loader = AssetFileLoader.Load (url, null, LoaderMode.Sync);
 			AutoRelease (loader);
-			return loader.IsCompleted ? null : loader.Asset;
+			return loader.IsCompleted ? loader.Asset : null;
+		}
+
+		public static GameObject Instantiate (string url)
+		{
+			Object asset = Load (url);
+			return asset == null ? null : GameObject.Instantiate (asset) as GameObject;
 		}
 
 		public static AB_AssetLoader Open (string url, AssetFileBridgeDelegate callback)

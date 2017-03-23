@@ -30,8 +30,8 @@ namespace Absir
 						AB_Context.ME.StartCoroutine (SetInitActiveDelay (go));
 					});
 				}
-
-				Destroy (this);
+					
+				//Destroy (this);
 			});
 		}
 
@@ -81,5 +81,6 @@ namespace Absir
 		{
 			
 		}
+
 	}
 }

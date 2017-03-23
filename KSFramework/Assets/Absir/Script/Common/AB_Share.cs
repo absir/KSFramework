@@ -12,6 +12,8 @@ namespace Absir
 
 		public AB_Call call;
 
+		public bool _noUnactive;
+
 		public static AB_Share GetShare (string name)
 		{
 			AB_Share share = null;
@@ -61,7 +63,12 @@ namespace Absir
 				call = AB_Call.Find (gameObject);
 			}
 			
-			AddShare (this);
+			if (AddShare (this)) {
+				if (!_noUnactive) {
+					GameObjectUtils.GetOrAddComponent<AB_Retain> (gameObject).Retain ();
+					AB_UI.ME.UnActiveView (transform);
+				}
+			}
 		}
 
 		void OnDestory ()

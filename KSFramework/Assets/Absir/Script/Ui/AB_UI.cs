@@ -164,13 +164,20 @@ namespace Absir
 			OpenDialogName (gameObject, null);
 		}
 
+		protected GameObject _dialogBackGroundDefault;
+
+		protected GameObject getDialogBackGroundDefault ()
+		{
+			if (_dialogBackGroundDefault == null) {
+				_dialogBackGroundDefault = GetRetain ("_dialogBackGround");
+			}
+
+			return _dialogBackGroundDefault;
+		}
+
 		public void OpenDialogName (GameObject gameObject, string name)
 		{
-			if (name == null) {
-				name = "_dialogBackGround";
-			}
-			
-			OpenDialogWithBackGround (gameObject, _dialogObjectStack.Count == 0 && name.Length != 0 ? GetRetain (name) : null);
+			OpenDialogWithBackGround (gameObject, _dialogObjectStack.Count == 0 ? name == null ? getDialogBackGroundDefault () : GetRetain (name) : null);
 		}
 
 		public void OpenDialogWithBackGround (GameObject gameObject, GameObject dialogBackGround)
@@ -257,6 +264,44 @@ namespace Absir
 
 			CloseDialogBackGround ();
 		}
+
+		public void Loading ()
+		{
+			LoadingName (null);
+		}
+
+		protected GameObject _loadingDefault;
+
+		protected GameObject getLoadingDefault ()
+		{
+			if (_loadingDefault == null) {
+				_loadingDefault = GetRetain ("_loading");
+			}
+
+			return _loadingDefault;
+		}
+
+		public void LoadingName (string name)
+		{
+			GameObject loading = name == null ? getLoadingDefault () : GetRetain (name);
+			if (loading != null) {
+				AddView (loading.transform, AB_Screen.ME.getContainer ().parent);
+			}
+		}
+
+		public void UnLoading ()
+		{
+			UnLoadingName (null);
+		}
+
+		public void UnLoadingName (string name)
+		{
+			GameObject loading = name == null ? getLoadingDefault () : GetRetain (name);
+			if (loading != null) {
+				AddView (loading.transform, _unactiveGameObject.transform);
+			}
+		}
+
 	}
 }
 
